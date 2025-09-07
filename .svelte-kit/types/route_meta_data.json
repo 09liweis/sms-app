@@ -1,0 +1,22 @@
+{
+	"/": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.ts"
+	],
+	"/dashboard": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.ts"
+	],
+	"/dashboard/history": [
+		"src/routes/+layout.ts"
+	],
+	"/dashboard/send-sms": [
+		"src/routes/+layout.ts"
+	],
+	"/dashboard/settings": [
+		"src/routes/+layout.ts"
+	],
+	"/login": [
+		"src/routes/+layout.ts"
+	]
+}
