@@ -1,0 +1,108 @@
+<script lang="ts">
+	import { login } from '$lib/stores/auth';
+	import { goto } from '$app/navigation';
+	
+	let email = '';
+	let password = '';
+	let isLoading = false;
+	let error = '';
+
+	async function handleSubmit() {
+		if (!email || !password) {
+			error = 'Please fill in all fields';
+			return;
+		}
+
+		isLoading = true;
+		error = '';
+
+		try {
+			const success = await login(email, password);
+			if (success) {
+				goto('/dashboard');
+			} else {
+				error = 'Invalid email or password';
+			}
+		} catch (err) {
+			error = 'An error occurred. Please try again.';
+		} finally {
+			isLoading = false;
+		}
+	}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+	<div class="max-w-md w-full">
+		<div class="bg-white rounded-2xl shadow-xl p-8">
+			<div class="text-center mb-8">
+				<div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
+					<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+					</svg>
+				</div>
+				<h1 class="text-3xl font-bold text-gray-900 mb-2">8n8</h1>
+				<p class="text-gray-600">SMS Management Platform</p>
+			</div>
+
+			<form on:submit|preventDefault={handleSubmit} class="space-y-6">
+				<div>
+					<label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+						Email Address
+					</label>
+					<input
+						id="email"
+						type="email"
+						bind:value={email}
+						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+						placeholder="Enter your email"
+						disabled={isLoading}
+					/>
+				</div>
+
+				<div>
+					<label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+						Password
+					</label>
+					<input
+						id="password"
+						type="password"
+						bind:value={password}
+						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+						placeholder="Enter your password"
+						disabled={isLoading}
+					/>
+				</div>
+
+				{#if error}
+					<div class="bg-red-50 border border-red-200 rounded-lg p-3">
+						<p class="text-red-600 text-sm">{error}</p>
+					</div>
+				{/if}
+
+				<button
+					type="submit"
+					disabled={isLoading}
+					class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				>
+					{#if isLoading}
+						<div class="flex items-center justify-center">
+							<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+							Signing in...
+						</div>
+					{:else}
+						Sign In
+					{/if}
+				</button>
+			</form>
+
+			<div class="mt-6 text-center">
+				<p class="text-sm text-gray-600">
+					Demo credentials: <span class="font-medium">admin@8n8.com</span> / <span class="font-medium">password</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

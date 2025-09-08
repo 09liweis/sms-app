@@ -2,13 +2,14 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { isAuthenticated } from '$lib/stores/auth';
-	import LoginForm from '$lib/components/LoginForm.svelte';
+	import Sidebar from '$lib/components/Sidebar.svelte';
+
+	let { children } = $props();
 
 	onMount(() => {
-		// Check if user is already authenticated
 		const unsubscribe = isAuthenticated.subscribe(value => {
-			if (value) {
-				goto('/dashboard');
+			if (!value) {
+				goto('/');
 			}
 		});
 
@@ -16,8 +17,9 @@
 	});
 </script>
 
-<svelte:head>
-	<title>8n8 - SMS Management Platform</title>
-</svelte:head>
-
-<LoginForm />
+<div class="flex min-h-screen bg-gray-50">
+	<Sidebar />
+	<main class="flex-1">
+		{@render children?.()}
+	</main>
+</div>

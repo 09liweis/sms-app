@@ -1,0 +1,64 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { logout } from '$lib/stores/auth';
+	import { goto } from '$app/navigation';
+
+	function handleLogout() {
+		logout();
+		goto('/');
+	}
+
+	$: currentPath = $page.url.pathname;
+</script>
+
+<div class="bg-gray-900 text-white w-64 min-h-screen flex flex-col">
+	<div class="p-6">
+		<div class="flex items-center">
+			<div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center mr-3">
+				<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+				</svg>
+			</div>
+			<h1 class="text-xl font-bold">8n8</h1>
+		</div>
+	</div>
+
+	<nav class="flex-1 px-4">
+		<ul class="space-y-2">
+			<li>
+				<a
+					href="/dashboard"
+					class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
+				>
+					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+					</svg>
+					Dashboard
+				</a>
+			</li>
+			<li>
+				<a
+					href="/dashboard/send"
+					class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard/send' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
+				>
+					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+					</svg>
+					Send SMS
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+	<div class="p-4 border-t border-gray-800">
+		<button
+			on:click={handleLogout}
+			class="flex items-center w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+		>
+			<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+			</svg>
+			Sign Out
+		</button>
+	</div>
+</div>
