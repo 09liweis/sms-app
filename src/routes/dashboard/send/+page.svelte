@@ -23,11 +23,11 @@
 		}
 
 		// Basic phone number validation
-		const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
-		if (!phoneRegex.test(phoneNumber)) {
-			error = 'Please enter a valid phone number';
-			return;
-		}
+		// const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
+		// if (!phoneRegex.test(phoneNumber)) {
+		// 	error = 'Please enter a valid phone number';
+		// 	return;
+		// }
 
 		isLoading = true;
 		error = '';
@@ -90,16 +90,18 @@
 				</div>
 			{/if}
 
-			<form on:submit|preventDefault={handleSubmit} class="space-y-6">
+			<form onsubmit={handleSubmit} class="space-y-6">
 				<div>
 					<label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
 						Phone Number
 					</label>
 					<input
 						id="phone"
-						type="tel"
+						type="text"
 						bind:value={phoneNumber}
-						on:input={handlePhoneInput}
+						oninput={()=>{
+							//handlePhoneInput
+						}}
 						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
 						placeholder="+1 (555) 123-4567"
 						disabled={isLoading}

@@ -75,6 +75,32 @@ export const messages = writable<SMSMessage[]>(mockMessages);
 export const stats = writable<SMSStats>(mockStats);
 
 export function sendSMS(to: string, message: string): Promise<boolean> {
+
+	api.post('/api/send-sms', { to, message })
+		.then(response => {
+			if (response.success && response.data) {
+				const newMessage: SMSMessage = {
+					id: response.data.id,
+					to,
+					message,
+					status: response.data.status,
+					timestamp: new Date(response.data.timestamp),
+					cost: response.data.cost
+				};
+				
+				messages.update(msgs => [newMessage, ...msgs]);
+				stats.update(s => ({
+					...s,
+					totalSent: s.totalSent + 1,
+					totalCost: s.totalCost + response.data.cost
+				}));
+				
+				return true;
+			}
+			return false;
+		})
+		.catch(() => false);
+
 	// Simulate API call - replace with actual API endpoint
 	return new Promise((resolve) => {
 		setTimeout(() => {

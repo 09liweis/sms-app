@@ -9,7 +9,7 @@
 	onMount(() => {
 		const unsubscribe = isAuthenticated.subscribe(value => {
 			if (!value) {
-				goto('/');
+				// goto('/');
 			}
 		});
 
