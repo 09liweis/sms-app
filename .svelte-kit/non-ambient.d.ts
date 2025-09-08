@@ -27,20 +27,15 @@ export {};
 
 declare module "$app/types" {
 	export interface AppTypes {
-		RouteId(): "/" | "/dashboard" | "/dashboard/history" | "/dashboard/send-sms" | "/dashboard/settings" | "/login";
+		RouteId(): "/";
 		RouteParams(): {
 			
 		};
 		LayoutParams(): {
-			"/": Record<string, never>;
-			"/dashboard": Record<string, never>;
-			"/dashboard/history": Record<string, never>;
-			"/dashboard/send-sms": Record<string, never>;
-			"/dashboard/settings": Record<string, never>;
-			"/login": Record<string, never>
+			"/": Record<string, never>
 		};
-		Pathname(): "/" | "/dashboard" | "/dashboard/" | "/dashboard/history" | "/dashboard/history/" | "/dashboard/send-sms" | "/dashboard/send-sms/" | "/dashboard/settings" | "/dashboard/settings/" | "/login" | "/login/";
+		Pathname(): "/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): string & {};
+		Asset(): "/robots.txt" | string & {};
 	}
 }
