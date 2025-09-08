@@ -8,8 +8,8 @@
 	let error = $state('');
 
 	const maxLength = 160;
-	const remainingChars = (typeof maxLength === 'number' && message) ? maxLength - message.length : 0;
-	const isOverLimit = message.length > maxLength;
+	const remainingChars = $derived(maxLength - message.length);
+	const isOverLimit = $derived(message.length > maxLength);
 
 	async function handleSubmit() {
 		if (!phoneNumber || !message) {
@@ -71,14 +71,14 @@
 	<title>Send SMS - 8n8</title>
 </svelte:head>
 
-<div class="p-8">
-	<div class="mb-8">
+<div class="p-4 sm:p-6 lg:p-8">
+	<div class="mb-6 lg:mb-8">
 		<h1 class="text-3xl font-bold text-gray-900 mb-2">Send SMS</h1>
 		<p class="text-gray-600">Send SMS messages to your customers</p>
 	</div>
 
-	<div class="max-w-2xl">
-		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+	<div class="max-w-2xl mx-auto">
+		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
 			{#if success}
 				<div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
 					<div class="flex items-center">
@@ -122,7 +122,8 @@
 					<div class="mt-1 flex justify-between items-center">
 						<p class="text-sm text-gray-500">SMS messages are charged at $0.05 per message</p>
 						<p class="text-sm {isOverLimit ? 'text-red-600' : remainingChars < 20 ? 'text-yellow-600' : 'text-gray-500'}">
-							{remainingChars} characters remaining
+							<span class="hidden sm:inline">{remainingChars} characters remaining</span>
+							<span class="sm:hidden">{remainingChars} left</span>
 						</p>
 					</div>
 				</div>
@@ -138,14 +139,14 @@
 					</div>
 				{/if}
 
-				<div class="flex items-center justify-between pt-4">
-					<div class="text-sm text-gray-600">
+				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 space-y-4 sm:space-y-0">
+					<div class="text-sm text-gray-600 order-2 sm:order-1">
 						<p>Estimated cost: <span class="font-semibold">$0.05</span></p>
 					</div>
 					<button
 						type="submit"
 						disabled={isLoading || !phoneNumber || !message || isOverLimit}
-						class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+						class="w-full sm:w-auto bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2"
 					>
 						{#if isLoading}
 							<div class="flex items-center">
@@ -164,7 +165,7 @@
 		</div>
 
 		<!-- Quick Tips -->
-		<div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+		<div class="mt-6 lg:mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
 			<h3 class="text-lg font-semibold text-blue-900 mb-3">Quick Tips</h3>
 			<ul class="space-y-2 text-sm text-blue-800">
 				<li class="flex items-start">

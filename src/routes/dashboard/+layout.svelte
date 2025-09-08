@@ -17,9 +17,9 @@
 	});
 </script>
 
-<div class="flex min-h-screen bg-gray-50">
+<div class="lg:flex min-h-screen bg-gray-50">
 	<Sidebar />
-	<main class="flex-1">
+	<main class="flex-1 lg:ml-0">
 		{@render children?.()}
 	</main>
 </div>

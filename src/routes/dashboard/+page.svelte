@@ -51,14 +51,14 @@
 	<title>Dashboard - 8n8</title>
 </svelte:head>
 
-<div class="p-8">
-	<div class="mb-8">
+<div class="p-4 sm:p-6 lg:p-8">
+	<div class="mb-6 lg:mb-8">
 		<h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
 		<p class="text-gray-600">Overview of your SMS campaigns and statistics</p>
 	</div>
 
 	<!-- Stats Cards -->
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
 		<StatsCard
 			title="Total Sent"
 			value={currentStats.totalSent.toLocaleString()}
@@ -85,16 +85,16 @@
 		/>
 	</div>
 
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+	<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
 		<!-- Monthly Stats Chart -->
 		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-			<h2 class="text-xl font-semibold text-gray-900 mb-6">Monthly Statistics</h2>
+			<h2 class="text-lg lg:text-xl font-semibold text-gray-900 mb-4 lg:mb-6">Monthly Statistics</h2>
 			<div class="space-y-4">
 				{#each currentStats.monthlyStats as stat}
-					<div class="flex items-center justify-between">
+					<div class="flex items-center">
 						<div class="flex items-center">
-							<div class="w-12 text-sm font-medium text-gray-600">{stat.month}</div>
-							<div class="flex-1 mx-4">
+							<div class="w-8 sm:w-12 text-xs sm:text-sm font-medium text-gray-600">{stat.month}</div>
+							<div class="flex-1 mx-2 sm:mx-4">
 								<div class="bg-gray-200 rounded-full h-2">
 									<div 
 										class="bg-indigo-600 h-2 rounded-full transition-all duration-300"
@@ -103,8 +103,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="text-right">
-							<div class="text-sm font-semibold text-gray-900">{stat.sent}</div>
+						<div class="text-right ml-2">
+							<div class="text-xs sm:text-sm font-semibold text-gray-900">{stat.sent}</div>
 							<div class="text-xs text-gray-500">{formatCurrency(stat.cost)}</div>
 						</div>
 					</div>
@@ -114,19 +114,19 @@
 
 		<!-- Recent Messages -->
 		<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-			<h2 class="text-xl font-semibold text-gray-900 mb-6">Recent Messages</h2>
+			<h2 class="text-lg lg:text-xl font-semibold text-gray-900 mb-4 lg:mb-6">Recent Messages</h2>
 			<div class="space-y-4">
 				{#each recentMessages as message}
-					<div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+					<div class="flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3 p-3 bg-gray-50 rounded-lg">
 						<div class="flex-1 min-w-0">
-							<div class="flex items-center justify-between mb-1">
+							<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1 space-y-1 sm:space-y-0">
 								<p class="text-sm font-medium text-gray-900 truncate">{message.to}</p>
 								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {getStatusColor(message.status)}">
 									{message.status}
 								</span>
 							</div>
-							<p class="text-sm text-gray-600 mb-2 line-clamp-2">{message.message}</p>
-							<div class="flex items-center justify-between text-xs text-gray-500">
+							<p class="text-sm text-gray-600 mb-2">{message.message}</p>
+							<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-500 space-y-1 sm:space-y-0">
 								<span>{formatDate(message.timestamp)}</span>
 								<span>{formatCurrency(message.cost)}</span>
 							</div>
