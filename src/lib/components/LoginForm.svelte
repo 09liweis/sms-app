@@ -97,12 +97,6 @@
 					{/if}
 				</button>
 			</form>
-
-			<div class="mt-6 text-center">
-				<p class="text-sm text-gray-600">
-					Demo credentials: <span class="font-medium">admin@8n8.com</span> / <span class="font-medium">password</span>
-				</p>
-			</div>
 		</div>
 	</div>
 </div>
