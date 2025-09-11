@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { api } from '$lib/utils/api';
+import { sendRequest } from '$lib/utils/api';
 
 export interface User {
 	id: string;
@@ -10,7 +10,9 @@ export interface User {
 export const user = writable<User | null>(null);
 export const isAuthenticated = writable(false);
 
-export function login(email: string, password: string): Promise<boolean> {
+export async function login(email: string, password: string): Promise<boolean> {
+
+	await sendRequest('/api/login', {method: 'POST', body: {email, password}});
 	// Simulate API call - replace with actual API endpoint
 	return new Promise((resolve) => {
 		setTimeout(() => {
