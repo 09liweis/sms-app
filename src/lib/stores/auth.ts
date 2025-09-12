@@ -12,9 +12,10 @@ export const isAuthenticated = writable(false);
 
 export async function login(username: string, password: string): Promise<boolean> {
 
-	const {success, data} = await sendRequest('/api/login', {method: 'POST', body: {username, password}});
+	const {success, data:{jwt}} = await sendRequest('/api/login', {method: 'POST', body: {username, password}});
 	if (success) {
 		isAuthenticated.set(true);
+		localStorage.setItem('token', jwt);
 	}
 	return success;
 
