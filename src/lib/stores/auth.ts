@@ -10,26 +10,13 @@ export interface User {
 export const user = writable<User | null>(null);
 export const isAuthenticated = writable(false);
 
-export async function login(email: string, password: string): Promise<boolean> {
+export async function login(username: string, password: string): Promise<boolean> {
 
-	await sendRequest('/api/login', {method: 'POST', body: {email, password}});
-	// Simulate API call - replace with actual API endpoint
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			if (email === 'admin@8n8.com' && password === 'password') {
-				const userData = {
-					id: '1',
-					email: 'admin@8n8.com',
-					name: 'Admin User'
-				};
-				user.set(userData);
-				isAuthenticated.set(true);
-				resolve(true);
-			} else {
-				resolve(false);
-			}
-		}, 1000);
-	});
+	const {success, data} = await sendRequest('/api/login', {method: 'POST', body: {username, password}});
+	if (success) {
+		isAuthenticated.set(true);
+	}
+	return success;
 
 	// Example of how to use the API wrapper for real authentication:
 	/*
