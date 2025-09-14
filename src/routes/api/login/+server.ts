@@ -2,11 +2,12 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { sendRequest } from '$lib/utils/api';
 import { generateToken } from '$lib/utils/jwt';
+import { API_HOST } from '$env/static/private';
 
 export const POST: RequestHandler = async ({ request }) => {
   const { username, password } = await request.json();
 
-  const url = `http://13.228.130.204:53230/goip_get_sms_stat.html?username=${username}&password=${password}`;
+  const url = `${API_HOST}/goip_get_sms_stat.html?username=${username}&password=${password}`;
 
   const response = await sendRequest(url);
   console.log(response.data.stats);
