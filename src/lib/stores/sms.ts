@@ -58,21 +58,8 @@ const mockMessages: SMSMessage[] = [
 	}
 ];
 
-const mockStats: SMSStats = {
-	totalSent: 1247,
-	totalDelivered: 1198,
-	totalFailed: 49,
-	totalCost: 62.35,
-	monthlyStats: [
-		{ month: 'Jan', sent: 245, cost: 12.25 },
-		{ month: 'Feb', sent: 312, cost: 15.60 },
-		{ month: 'Mar', sent: 289, cost: 14.45 },
-		{ month: 'Apr', sent: 401, cost: 20.05 }
-	]
-};
 
 export const messages = writable<SMSMessage[]>(mockMessages);
-export const stats = writable<SMSStats>(mockStats);
 
 export function sendSMS(to: string, message: string): Promise<boolean> {
 
@@ -89,11 +76,6 @@ export function sendSMS(to: string, message: string): Promise<boolean> {
 				};
 				
 				messages.update(msgs => [newMessage, ...msgs]);
-				stats.update(s => ({
-					...s,
-					totalSent: s.totalSent + 1,
-					totalCost: s.totalCost + response.data.cost
-				}));
 				
 				return true;
 			}
@@ -114,11 +96,6 @@ export function sendSMS(to: string, message: string): Promise<boolean> {
 			};
 			
 			messages.update(msgs => [newMessage, ...msgs]);
-			stats.update(s => ({
-				...s,
-				totalSent: s.totalSent + 1,
-				totalCost: s.totalCost + 0.05
-			}));
 			
 			resolve(true);
 		}, 1500);
