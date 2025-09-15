@@ -76,7 +76,7 @@ export const stats = writable<SMSStats>(mockStats);
 
 export function sendSMS(to: string, message: string): Promise<boolean> {
 
-	api.post('/api/send-sms', { to, message })
+	api.post('/api/sms', { to, message })
 		.then(response => {
 			if (response.success && response.data) {
 				const newMessage: SMSMessage = {
