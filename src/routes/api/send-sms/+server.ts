@@ -1,9 +1,11 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { SEND_SMS_API } from '$env/static/private';
+import { getRandomInt } from '$lib/utils/helper';
 
 export const POST: RequestHandler = async ({ request }) => {
   const {to, message} = await request.json();
+  console.log(to);
   const url = SEND_SMS_API
 
   fetch(url, {
@@ -16,7 +18,7 @@ export const POST: RequestHandler = async ({ request }) => {
       task_num: 1,
       tasks: [
         {
-          tid: 13,
+          tid: getRandomInt(100),
           to,
           sms: message
         }
