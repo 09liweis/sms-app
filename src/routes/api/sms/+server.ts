@@ -10,7 +10,7 @@ export const GET: RequestHandler = async ({ request }) => {
     const user = await getAndDecodeTokenFromHeader(request);
     const url = `${API_HOST}/goip_get_sms_stat.html?username=${user.username}&password=${user.password}`
     const {success, data} = await api.get(url);    
-    return json({success, data},{status:200});
+    return json({stats:data.stats},{status:200});
   } catch (error) {
     return json({success:false},{status:500});
   }
