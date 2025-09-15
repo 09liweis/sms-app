@@ -11,6 +11,13 @@ export interface RequestOptions {
 	timeout?: number;
 }
 
+function getToken() {
+	if (typeof window !== 'undefined') {
+		return localStorage.getItem('token');
+	}
+	return null;
+}
+
 export async function sendRequest<T = any>(
 	url: string,
 	options: RequestOptions = {}
@@ -25,6 +32,7 @@ export async function sendRequest<T = any>(
 	// Default headers
 	const defaultHeaders: Record<string, string> = {
 		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${getToken()}`,
 		...headers
 	};
 
