@@ -12,10 +12,10 @@ export const GET: RequestHandler = async ({ request }) => {
     const {success, data} = await api.get(url);
 
     if (success) {
-      const conversations = data.data.map((item: string[]) => {
+      const conversations = data.data.map((item: any[]) => {
         return {
           sent: item[0],
-          timestamp: item[2],
+          timestamp: new Date(item[2] * 1000),
           from: item[3],
           to: item[4],
           message: atob(item[5]),
