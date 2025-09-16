@@ -37,4 +37,5 @@ export async function login(username: string, password: string): Promise<boolean
 export function logout() {
 	user.set(null);
 	isAuthenticated.set(false);
+	localStorage.setItem('token', '');
 }
