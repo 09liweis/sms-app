@@ -167,7 +167,7 @@
 		</div>
 
 		<!-- Quick Tips -->
-		<div class="mt-6 lg:mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+		<div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
 			<h3 class="text-lg font-semibold text-blue-900 mb-3">Quick Tips</h3>
 			<ul class="space-y-2 text-sm text-blue-800">
 				<li class="flex items-start">
