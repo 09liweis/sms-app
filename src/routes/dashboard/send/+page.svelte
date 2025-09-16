@@ -2,6 +2,8 @@
 	import { sendSMS, selectedConversation } from '$lib/stores/sms';
 	import ConversationList from '$lib/components/ConversationList.svelte';
 	import ConversationView from '$lib/components/ConversationView.svelte';
+    import { onMount } from 'svelte';
+    import { api } from '$lib/utils/api';
 
 	let phoneNumber = $state('');
 	let message = $state('');
@@ -13,6 +15,13 @@
 	const maxLength = 160;
 	const remainingChars = $derived(maxLength - message.length);
 	const isOverLimit = $derived(message.length > maxLength);
+
+	let conversations = $state([]);
+
+	onMount(async()=>{
+		const {data} = await api.get('/api/sms');
+		conversations = data.conversations;
+	});
 
 	async function handleSubmit() {
 		if (!phoneNumber || !message) {
@@ -107,7 +116,7 @@
 						New SMS
 					</button>
 				</div>
-				<ConversationList onSelectConversation={handleSelectConversation} />
+				<ConversationList conversations={conversations} onSelectConversation={handleSelectConversation} />
 			</div>
 		</div>
 

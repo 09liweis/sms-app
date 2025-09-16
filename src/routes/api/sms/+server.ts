@@ -8,9 +8,23 @@ import { api } from '$lib/utils/api';
 export const GET: RequestHandler = async ({ request }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
-    const url = `${API_HOST}/goip_get_sms_stat.html?username=${user.username}&password=${user.password}`
-    const {success, data} = await api.get(url);    
-    return json({stats:data.stats},{status:200});
+    const url = `${API_HOST}/goip_get_sms.html?username=${user.username}&password=${user.password}`
+    const {success, data} = await api.get(url);
+
+    if (success) {
+      const conversations = data.data.map((item: string[]) => {
+        return {
+          sent: item[0],
+          timestamp: item[2],
+          from: item[3],
+          to: item[4],
+          message: atob(item[5]),
+        }
+      })
+      return json({conversations},{status:200});
+    } else {
+      return json({success, message: 'Opppss something went wrong'},{status:500});
+    }
   } catch (error) {
     return json({success:false},{status:500});
   }
