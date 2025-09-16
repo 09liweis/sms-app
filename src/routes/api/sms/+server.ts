@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { API_HOST, SEND_SMS_API } from '$env/static/private';
+import { API_HOST } from '$env/static/private';
 import { getRandomInt } from '$lib/utils/helper';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { api } from '$lib/utils/api';
@@ -37,6 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
       ]
     }
     const {success, data} = await api.post(url, body);
+    console.log(data);
 
     return json({ success, message: 'Send SMS successful' }, { status: data.code });
   } catch (error) {
