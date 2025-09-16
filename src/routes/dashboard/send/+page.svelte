@@ -94,7 +94,21 @@
 	<div class="flex h-[calc(100vh-200px)] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
 		<!-- Conversation List -->
 		<div class="w-80 flex-shrink-0">
-			<ConversationList onSelectConversation={handleSelectConversation} />
+			<div class="bg-white border-r border-gray-200 h-full flex flex-col">
+				<div class="p-4 border-b border-gray-200 flex items-center justify-between">
+					<h2 class="text-lg font-semibold text-gray-900">Conversations</h2>
+					<button
+						on:click={startNewMessage}
+						class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors flex items-center"
+					>
+						<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+						</svg>
+						New SMS
+					</button>
+				</div>
+				<ConversationList onSelectConversation={handleSelectConversation} />
+			</div>
 		</div>
 
 		<!-- Main Content Area -->
@@ -103,14 +117,6 @@
 				<!-- New Message Form -->
 				<div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
 					<h3 class="text-lg font-semibold text-gray-900">New Message</h3>
-					{#if !showNewMessage}
-						<button
-							on:click={startNewMessage}
-							class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
-						>
-							New Message
-						</button>
-					{/if}
 				</div>
 
 				<div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">

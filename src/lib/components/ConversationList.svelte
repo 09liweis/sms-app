@@ -37,10 +37,6 @@
 </script>
 
 <div class="bg-white border-r border-gray-200 h-full flex flex-col">
-	<div class="p-4 border-b border-gray-200">
-		<h2 class="text-lg font-semibold text-gray-900">Conversations</h2>
-	</div>
-	
 	<div class="flex-1 overflow-y-auto">
 		{#each $conversations as conversation (conversation.phoneNumber)}
 			<button
