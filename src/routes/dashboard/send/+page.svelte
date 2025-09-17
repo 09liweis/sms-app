@@ -149,7 +149,6 @@
 						id="phone"
 						type="text"
 						bind:value={phoneNumber}
-						on:input={handlePhoneInput}
 						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
 						placeholder="+1 (555) 123-4567"
 						disabled={isLoading}
