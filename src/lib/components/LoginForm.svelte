@@ -1,11 +1,21 @@
 <script lang="ts">
 	import { login } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
+    import { api } from '$lib/utils/api';
 	
 	let username = '';
 	let password = '';
 	let isLoading = false;
 	let error = '';
+
+	onMount(async () => {
+		const {success, data:{user}} = await api.get('/api/user');
+		
+		if (user) {
+			goto('/dashboard');
+		}
+	});
 
 	async function handleSubmit() {
 		if (!username || !password) {
