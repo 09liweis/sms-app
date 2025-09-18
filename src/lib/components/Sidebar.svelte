@@ -23,7 +23,7 @@
 <!-- Mobile menu button -->
 <div class="lg:hidden bg-white border-b border-gray-200 p-4">
 	<button
-		on:click={toggleMobileMenu}
+		onclick={toggleMobileMenu}
 		class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
 	>
 		<svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@
 <!-- Mobile menu overlay -->
 {#if isMobileMenuOpen}
 	<div class="lg:hidden fixed inset-0 z-50 flex">
-		<div class="fixed inset-0 bg-black bg-opacity-50" on:click={closeMobileMenu}></div>
+		<div class="fixed inset-0 bg-black bg-opacity-50" onclick={closeMobileMenu}></div>
 		<div class="relative bg-gray-900 text-white w-64 min-h-screen flex flex-col">
 			<div class="p-6">
 				<div class="flex items-center justify-between">
@@ -48,7 +48,7 @@
 						<h1 class="text-xl font-bold">8n8</h1>
 					</div>
 					<button
-						on:click={closeMobileMenu}
+						onclick={closeMobileMenu}
 						class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-800 transition-colors"
 					>
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@
 					<li>
 						<a
 							href="/dashboard"
-							on:click={closeMobileMenu}
+							onclick={closeMobileMenu}
 							class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
 						>
 							<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
 					<li>
 						<a
 							href="/dashboard/send"
-							on:click={closeMobileMenu}
+							onclick={closeMobileMenu}
 							class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard/send' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
 						>
 							<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@
 
 			<div class="p-4 border-t border-gray-800">
 				<button
-					on:click={() => { handleLogout(); closeMobileMenu(); }}
+					onclick={() => { handleLogout(); closeMobileMenu(); }}
 					class="flex items-center w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
 				>
 					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@
 
 	<div class="p-4 border-t border-gray-800">
 		<button
-			on:click={handleLogout}
+			onclick={handleLogout}
 			class="flex items-center w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
 		>
 			<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
