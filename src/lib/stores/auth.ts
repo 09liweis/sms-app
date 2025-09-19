@@ -7,8 +7,30 @@ export interface User {
 	name: string;
 }
 
+export interface DashboardData {
+	totalSent: number,
+	totalSentOk: number,
+	totalReceived: number,
+	totalSendFailed: number,
+	totalSending: number
+}
+
 export const user = writable<User | null>(null);
 export const isAuthenticated = writable(false);
+export const dashboardData = writable<DashboardData|null>(null);
+
+export async function getDashboardData(opt:any) {
+	const {success, data} = await sendRequest(`/api/dashboard?type=${opt.type}`, {method: 'GET'});
+	if (success) {
+		dashboardData.set(data);
+	} else {
+		dashboardData.set({totalSent: 0,
+	totalSentOk: 0,
+	totalReceived: 0,
+	totalSendFailed: 0,
+	totalSending: 0});
+	}
+}
 
 export async function login(username: string, password: string): Promise<boolean> {
 

@@ -1,5 +1,22 @@
 <script lang="ts">
+    import { getDashboardData, dashboardData } from '$lib/stores/auth';
 	import { onMount } from 'svelte';
+
+	let selectedType = 3;
+	const statTypes = [
+		{ value: 0, label: '最近一小时' },
+		{ value: 1, label: '最近两小时' },
+		{ value: 2, label: '当日' },
+		{ value: 3, label: '累计' }
+	];
+
+	function handleTypeChange() {
+		getDashboardData({type:selectedType});
+	}
+
+	onMount(async () => {
+		getDashboardData({type:selectedType});
+	})
 </script>
 
 <svelte:head>
@@ -10,6 +27,36 @@
 	<div class="mb-6 lg:mb-8">
 		<h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
 		<p class="text-gray-600">Overview of your SMS campaigns and statistics</p>
+		<div class="mt-4">
+			<select 
+				bind:value={selectedType}
+				on:change={handleTypeChange}
+				class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+			>
+				{#each statTypes as type}
+					<option value={type.value}>{type.label}</option>
+				{/each}
+			</select>
+		</div>
 	</div>
 
+	{#if $dashboardData}
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{#each Object.entries($dashboardData) as [key, value]}
+				<div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+					<h3 class="text-lg font-semibold text-gray-800 mb-2">{key}</h3>
+					<p class="text-gray-600">{value}</p>
+				</div>
+			{/each}
+		</div>
+	{:else}
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{#each Array(6).fill(0) as _, i}
+				<div class="bg-white rounded-lg shadow-md p-6 animate-pulse">
+					<div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+					<div class="h-4 bg-gray-200 rounded w-full"></div>
+				</div>
+			{/each}
+		</div>
+	{/if}
 </div>

@@ -1,8 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { sendRequest } from '$lib/utils/api';
-import { generateToken, getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
-import { API_HOST } from '$env/static/private';
+import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { supabase } from '$lib/supabase';
 
 export const GET: RequestHandler = async ({ request }) => {
