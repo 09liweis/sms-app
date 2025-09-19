@@ -3,13 +3,13 @@
 	import { onMount } from "svelte";
 
 	const keyColorMap: { [key: string]: string } = {
-		total_sent: "bg-red-100",
-		total_sentOk: "bg-red-100",
+		total_sent: "bg-blue-100",
+		total_sentOk: "bg-green-100",
 		total_received: "bg-green-100",
-		total_sent_failed: "bg-yellow-100",
-		total_con_failed: "bg-yellow-100",
+		total_sent_failed: "bg-red-100",
+		total_con_failed: "bg-red-100",
 		total_sending: "bg-blue-100",
-		total_sending_failed: "bg-yellow-100",
+		total_sending_failed: "bg-red-100",
 		total_sending_ok: "bg-green-100",
 	};
 
@@ -28,7 +28,7 @@
 	onMount(() => {
 		fetchDashboardData();
 		const interval = setInterval(() => {
-			fetchDashboardData();
+			getDashboardData({type: selectedType});
 		}, 20000);
 
 		return () => {
