@@ -1,13 +1,24 @@
 <script lang="ts">
-    import { getDashboardData, dashboardData } from '$lib/stores/auth';
-	import { onMount } from 'svelte';
+	import { getDashboardData, dashboardData } from "$lib/stores/auth";
+	import { onMount } from "svelte";
+
+	const keyColorMap: { [key: string]: string } = {
+		total_sent: "bg-red-100",
+		total_sentOk: "bg-red-100",
+		total_received: "bg-green-100",
+		total_sent_failed: "bg-yellow-100",
+		total_con_failed: "bg-yellow-100",
+		total_sending: "bg-blue-100",
+		total_sending_failed: "bg-yellow-100",
+		total_sending_ok: "bg-green-100",
+	};
 
 	let selectedType = 3;
 	const statTypes = [
-		{ value: 0, label: '最近一小时' },
-		{ value: 1, label: '最近两小时' },
-		{ value: 2, label: '当日' },
-		{ value: 3, label: '累计' }
+		{ value: 0, label: "最近一小时" },
+		{ value: 1, label: "最近两小时" },
+		{ value: 2, label: "当日" },
+		{ value: 3, label: "累计" },
 	];
 
 	function handleTypeChange() {
@@ -23,12 +34,12 @@
 		return () => {
 			clearInterval(interval);
 		};
-	})
-
+	});
 
 	let loading = true;
 	async function fetchDashboardData() {
-		await getDashboardData({type:selectedType});
+		loading = true;
+		await getDashboardData({ type: selectedType });
 		loading = false;
 	}
 </script>
@@ -42,7 +53,7 @@
 		<h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
 		<p class="text-gray-600">Overview of your SMS campaigns and statistics</p>
 		<div class="mt-4">
-			<select 
+			<select
 				bind:value={selectedType}
 				on:change={handleTypeChange}
 				class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -57,8 +68,14 @@
 	{#if !loading && $dashboardData}
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{#each Object.entries($dashboardData) as [key, value]}
-				<div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-					<h3 class="text-lg font-semibold text-gray-800 mb-2 capitalize">{key.split('_').join(' ')}</h3>
+				<div
+					class={`${keyColorMap[key]} rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow`}
+				>
+					<h3
+						class={`text-lg font-semibold mb-2 capitalize`}
+					>
+						{key.split("_").join(" ")}
+					</h3>
 					<p class="text-gray-600 text-3xl font-bold">{value}</p>
 				</div>
 			{/each}
