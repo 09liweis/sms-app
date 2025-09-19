@@ -2,9 +2,7 @@ import { writable } from 'svelte/store';
 import { sendRequest } from '$lib/utils/api';
 
 export interface User {
-	id: string;
-	email: string;
-	name: string;
+	username: string;
 }
 
 export interface DashboardData {
@@ -34,10 +32,11 @@ export async function getDashboardData(opt:any) {
 
 export async function login(username: string, password: string): Promise<boolean> {
 
-	const {success, data:{jwt}} = await sendRequest('/api/login', {method: 'POST', body: {username, password}});
+	const {success, data:{jwt, user:curUser}} = await sendRequest('/api/login', {method: 'POST', body: {username, password}});
 	if (success) {
 		isAuthenticated.set(true);
 		localStorage.setItem('token', jwt);
+		user.set(curUser);
 	}
 	return success;
 
