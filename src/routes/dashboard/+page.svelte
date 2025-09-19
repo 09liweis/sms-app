@@ -14,8 +14,15 @@
 		fetchDashboardData();
 	}
 
-	onMount(async () => {
+	onMount(() => {
 		fetchDashboardData();
+		const interval = setInterval(() => {
+			fetchDashboardData();
+		}, 20000);
+
+		return () => {
+			clearInterval(interval);
+		};
 	})
 
 
