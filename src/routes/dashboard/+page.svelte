@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getDashboardData, dashboardData } from "$lib/stores/auth";
+    import { api } from "$lib/utils/api";
 	import { onMount } from "svelte";
 
 	const keyColorMap: { [key: string]: string } = {
@@ -27,6 +28,8 @@
 
 	onMount(() => {
 		fetchDashboardData();
+		fetchTasks();
+		
 		const interval = setInterval(() => {
 			getDashboardData({type: selectedType});
 		}, 20000);
@@ -41,6 +44,11 @@
 		loading = true;
 		await getDashboardData({ type: selectedType });
 		loading = false;
+	}
+
+
+	async function fetchTasks() {
+		const { success, data } = await api.get('/api/tasks');
 	}
 </script>
 

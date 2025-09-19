@@ -9,11 +9,11 @@ export const POST: RequestHandler = async ({ request }) => {
   try {
     const { username, password } = await request.json();
 
-    const url = `${API_HOST}/goip_get_sms_stat.html?username=${username}&password=${password}`;
+    const url = `${API_HOST}/goip_send_ussd.html?username=${username}&password=${password}`;
 
     const response = await sendRequest(url);
-    console.log(response.data.stats);
     const { data: {code, reason}, success } = response;
+    console.log(response);
     
     if (code === 1) {
       return json({ success: false, message: reason }, { status: 401 });
