@@ -8,11 +8,11 @@ export interface User {
 }
 
 export interface DashboardData {
-	totalSent: number,
-	totalSentOk: number,
-	totalReceived: number,
-	totalSendFailed: number,
-	totalSending: number
+	total_sent: number,
+	total_sentOk: number,
+	total_received: number,
+	total_sent_failed: number,
+	total_sending: number
 }
 
 export const user = writable<User | null>(null);
@@ -24,11 +24,11 @@ export async function getDashboardData(opt:any) {
 	if (success) {
 		dashboardData.set(data);
 	} else {
-		dashboardData.set({totalSent: 0,
-	totalSentOk: 0,
-	totalReceived: 0,
-	totalSendFailed: 0,
-	totalSending: 0});
+		dashboardData.set({total_sent: 0,
+	total_sentOk: 0,
+	total_received: 0,
+	total_sent_failed: 0,
+	total_sending: 0});
 	}
 }
 

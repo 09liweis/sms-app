@@ -14,12 +14,12 @@ export const GET: RequestHandler = async ({ request }) => {
     }
 
     const dashboardData = {
-      totalSent: 0,
-      totalSentOk: 0,
-      totalReceived: 0,
-      totalSendFailed: 0,
-      totalSending: 0,
-      totalConFailed: 0
+      total_sent: 0,
+      total_sentOk: 0,
+      total_received: 0,
+      total_sent_failed: 0,
+      total_sending: 0,
+      total_con_failed: 0
     };
 
     const urlParams = new URL(request.url).searchParams;
@@ -34,12 +34,12 @@ export const GET: RequestHandler = async ({ request }) => {
     }
 
     stats.forEach((item: { sent: number; sent_ok: number; received: number; sent_failed: number; sending: number; con_failed: number }) => {
-      dashboardData.totalSent += item.sent;
-      dashboardData.totalSentOk += item.sent_ok;
-      dashboardData.totalReceived += item.received;
-      dashboardData.totalSendFailed += item.sent_failed;
-      dashboardData.totalSending += item.sending;
-      dashboardData.totalConFailed += item.con_failed;
+      dashboardData.total_sent += item.sent;
+      dashboardData.total_sentOk += item.sent_ok;
+      dashboardData.total_received += item.received;
+      dashboardData.total_sent_failed += item.sent_failed;
+      dashboardData.total_sending += item.sending;
+      dashboardData.total_con_failed += item.con_failed;
     });
 
     return json(dashboardData, { status: 200 }); 

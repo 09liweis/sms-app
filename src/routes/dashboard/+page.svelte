@@ -11,12 +11,19 @@
 	];
 
 	function handleTypeChange() {
-		getDashboardData({type:selectedType});
+		fetchDashboardData();
 	}
 
 	onMount(async () => {
-		getDashboardData({type:selectedType});
+		fetchDashboardData();
 	})
+
+
+	let loading = true;
+	async function fetchDashboardData() {
+		await getDashboardData({type:selectedType});
+		loading = false;
+	}
 </script>
 
 <svelte:head>
@@ -40,12 +47,12 @@
 		</div>
 	</div>
 
-	{#if $dashboardData}
+	{#if !loading && $dashboardData}
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{#each Object.entries($dashboardData) as [key, value]}
 				<div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-					<h3 class="text-lg font-semibold text-gray-800 mb-2">{key}</h3>
-					<p class="text-gray-600">{value}</p>
+					<h3 class="text-lg font-semibold text-gray-800 mb-2 capitalize">{key.split('_').join(' ')}</h3>
+					<p class="text-gray-600 text-3xl font-bold">{value}</p>
 				</div>
 			{/each}
 		</div>

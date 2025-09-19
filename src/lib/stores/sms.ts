@@ -10,7 +10,7 @@ export interface SMSMessage {
 }
 
 export interface SMSStats {
-	totalSent: number;
+	total_sent: number;
 	totalDelivered: number;
 	totalFailed: number;
 	totalCost: number;
