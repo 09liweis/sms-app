@@ -17,9 +17,11 @@
 	const isOverLimit = $derived(message.length > maxLength);
 
 	let conversations = $state([]);
+	let loadingConversation = $state(true);
 
 	onMount(async()=>{
 		const {data} = await api.get('/api/sms');
+		loadingConversation = false;
 		conversations = data.conversations;
 	});
 
@@ -116,7 +118,7 @@
 						New SMS
 					</button>
 				</div>
-				<ConversationList conversations={conversations} onSelectConversation={handleSelectConversation} />
+				<ConversationList loading={loadingConversation} conversations={conversations} onSelectConversation={handleSelectConversation} />
 			</div>
 		</div>
 
