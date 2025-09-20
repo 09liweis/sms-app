@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { isAuthenticated } from '$lib/stores/auth';
 	import LoginForm from '$lib/components/LoginForm.svelte';
+  import { WEBSITE_NAME } from '$lib/constants/text';
 
 	onMount(() => {
 		// Check if user is already authenticated
@@ -17,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<title>8n8 - SMS Management Platform</title>
+	<title>{WEBSITE_NAME} - SMS Management Platform</title>
 </svelte:head>
 
 <LoginForm />

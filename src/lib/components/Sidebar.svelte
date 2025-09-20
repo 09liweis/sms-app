@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { logout, user } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
+  import { WEBSITE_NAME } from '$lib/constants/text';
 
 	let isMobileMenuOpen = $state(false);
 
@@ -45,7 +46,7 @@
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
 							</svg>
 						</div>
-						<h1 class="text-xl font-bold">8n8</h1>
+						<h1 class="text-xl font-bold">{WEBSITE_NAME}</h1>
 					</div>
 					<button
 						onclick={closeMobileMenu}
@@ -112,7 +113,7 @@
 				</svg>
 			</div>
 			<div>
-				<h1 class="text-xl font-bold">8n8</h1>
+				<h1 class="text-xl font-bold">{WEBSITE_NAME}</h1>
 				{#if $user}
 					<p class="text-sm text-gray-300">{$user.username}</p>
 				{/if}

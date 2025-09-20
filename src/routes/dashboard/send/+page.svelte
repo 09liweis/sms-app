@@ -4,6 +4,7 @@
 	import ConversationView from '$lib/components/ConversationView.svelte';
     import { onMount } from 'svelte';
     import { api } from '$lib/utils/api';
+  import { WEBSITE_NAME } from '$lib/constants/text';
 
 	let phoneNumber = $state('');
 	let message = $state('');
@@ -93,7 +94,7 @@
 </script>
 
 <svelte:head>
-	<title>Send SMS - 8n8</title>
+	<title>Send SMS - {WEBSITE_NAME}</title>
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">

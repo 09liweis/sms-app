@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { WEBSITE_NAME } from "$lib/constants/text";
 	import { getDashboardData, dashboardData } from "$lib/stores/auth";
     import { api } from "$lib/utils/api";
 	import { onMount } from "svelte";
@@ -53,7 +54,7 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard - 8n8</title>
+	<title>Dashboard - {WEBSITE_NAME}</title>
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
