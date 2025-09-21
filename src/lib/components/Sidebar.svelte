@@ -145,6 +145,17 @@
 					Send SMS
 				</a>
 			</li>
+			<li>
+				<a
+					href="/dashboard/admin"
+					class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard/admin' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
+				>
+					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15l8-8m0 0l-8-8m8 8H4m4 4a4 4 0 01-4-4"></path>
+					</svg>
+					Admin
+				</a>
+			</li>
 		</ul>
 	</nav>
 
