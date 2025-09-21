@@ -4,17 +4,6 @@
     import { api } from "$lib/utils/api";
 	import { onMount } from "svelte";
 
-	const keyColorMap: { [key: string]: string } = {
-		total_sent: "bg-blue-100",
-		total_sentOk: "bg-green-100",
-		total_received: "bg-green-100",
-		total_sent_failed: "bg-red-100",
-		total_con_failed: "bg-red-100",
-		total_sending: "bg-blue-100",
-		total_sending_failed: "bg-red-100",
-		total_sending_ok: "bg-green-100",
-	};
-
 	let selectedType = 3;
 	const statTypes = [
 		{ value: 0, label: "最近一小时" },
@@ -47,7 +36,6 @@
 		loading = false;
 	}
 
-
 	async function fetchTasks() {
 		const { success, data } = await api.get('/api/tasks');
 	}
@@ -75,19 +63,39 @@
 	</div>
 
 	{#if !loading && $dashboardData}
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{#each Object.entries($dashboardData) as [key, value]}
-				<div
-					class={`${keyColorMap[key]} rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow`}
-				>
-					<h3
-						class={`text-lg font-semibold mb-2 capitalize`}
-					>
-						{key.split("_").join(" ")}
-					</h3>
-					<p class="text-gray-600 text-3xl font-bold">{value}</p>
-				</div>
-			{/each}
+		<div class="overflow-x-auto">
+			<table class="min-w-full bg-white rounded-lg shadow-md">
+				<thead>
+					<tr class="bg-gray-100">
+						<th class="py-3 px-4 text-center">Port</th>
+						<th class="py-3 px-4 text-center">Slot</th>
+						<th class="py-3 px-4 text-center">Received</th>
+						<th class="py-3 px-4 text-center">Spam</th>
+						<th class="py-3 px-4 text-center">Sent</th>
+						<th class="py-3 px-4 text-center">Sent OK</th>
+						<th class="py-3 px-4 text-center">Sent Failed</th>
+						<th class="py-3 px-4 text-center">Connection Failed</th>
+						<th class="py-3 px-4 text-center">Unsent</th>
+						<th class="py-3 px-4 text-center">Sending</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each $dashboardData as port}
+						<tr class="border-b border-gray-200 hover:bg-gray-50">
+							<td class="py-3 px-4 text-center">{port.port}</td>
+							<td class="py-3 px-4 text-center">{port.slot}</td>
+							<td class="py-3 px-4 text-center">{port.received}</td>
+							<td class="py-3 px-4 text-center">{port.rcv_spam}</td>
+							<td class="py-3 px-4 text-center">{port.sent}</td>
+							<td class="py-3 px-4 text-center">{port.sent_ok}</td>
+							<td class="py-3 px-4 text-center">{port.sent_failed}</td>
+							<td class="py-3 px-4 text-center">{port.con_failed}</td>
+							<td class="py-3 px-4 text-center">{port.unsent}</td>
+							<td class="py-3 px-4 text-center">{port.sending}</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
 		</div>
 	{:else}
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

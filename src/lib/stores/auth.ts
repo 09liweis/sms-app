@@ -1,32 +1,19 @@
 import { writable } from 'svelte/store';
 import { sendRequest } from '$lib/utils/api';
+import type { PortStatus } from '$lib/types/sms';
 
 export interface User {
 	username: string;
 }
 
-export interface DashboardData {
-	total_sent: number,
-	total_sentOk: number,
-	total_received: number,
-	total_sent_failed: number,
-	total_sending: number
-}
-
 export const user = writable<User | null>(null);
 export const isAuthenticated = writable(false);
-export const dashboardData = writable<DashboardData|null>(null);
+export const dashboardData = writable<PortStatus[]>([]);
 
 export async function getDashboardData(opt:any) {
 	const {success, data} = await sendRequest(`/api/dashboard?type=${opt.type}`, {method: 'GET'});
 	if (success) {
 		dashboardData.set(data);
-	} else {
-		dashboardData.set({total_sent: 0,
-	total_sentOk: 0,
-	total_received: 0,
-	total_sent_failed: 0,
-	total_sending: 0});
 	}
 }
 

@@ -9,18 +9,6 @@ export interface SMSMessage {
 	timestamp: Date;
 }
 
-export interface SMSStats {
-	total_sent: number;
-	totalDelivered: number;
-	totalFailed: number;
-	totalCost: number;
-	monthlyStats: {
-		month: string;
-		sent: number;
-		cost: number;
-	}[];
-}
-
 
 export const selectedConversation = writable<string | null>(null);
 
