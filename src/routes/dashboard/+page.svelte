@@ -98,13 +98,39 @@
 			</table>
 		</div>
 	{:else}
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{#each Array(6).fill(0) as _, i}
-				<div class="bg-white rounded-lg shadow-md p-6 animate-pulse">
-					<div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-					<div class="h-4 bg-gray-200 rounded w-full"></div>
-				</div>
-			{/each}
+		<div class="overflow-x-auto">
+			<table class="min-w-full bg-white rounded-lg shadow-md">
+				<thead>
+					<tr class="bg-gray-100">
+						<th class="py-3 px-4 text-left">Port</th>
+						<th class="py-3 px-4 text-left">Slot</th>
+						<th class="py-3 px-4 text-left">Received</th>
+						<th class="py-3 px-4 text-left">Spam</th>
+						<th class="py-3 px-4 text-left">Sent</th>
+						<th class="py-3 px-4 text-left">Sent OK</th>
+						<th class="py-3 px-4 text-left">Sent Failed</th>
+						<th class="py-3 px-4 text-left">Connection Failed</th>
+						<th class="py-3 px-4 text-left">Unsent</th>
+						<th class="py-3 px-4 text-left">Sending</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each Array(10).fill(0) as _, i}
+						<tr class="border-b border-gray-200">
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+							<td class="py-3 px-4"><div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div></td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
 		</div>
 	{/if}
 </div>
