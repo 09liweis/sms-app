@@ -2,10 +2,12 @@
   import { WEBSITE_NAME } from '$lib/constants/text';
   import { api } from '$lib/utils/api';
 
-  let username = '';
-  let selectedPorts: number[] = [];
-  let ipAddress = '';
-  let role: 'admin' | 'user' | 'sms_only' = 'user';
+  let userData = {
+    username: '',
+    selectedPorts: [] as number[],
+    ipAddress: '',
+    role: 'user' as 'admin' | 'user' | 'sms_only'
+  };
   let isLoading = false;
   let success = '';
   let error = '';
@@ -22,14 +24,14 @@
   }
 
   async function createUser() {
-    if (!username || selectedPorts.length === 0 || !ipAddress) {
+    if (!userData.username || userData.selectedPorts.length === 0 || !userData.ipAddress) {
       error = 'Please fill in all required fields';
       return;
     }
 
     // Validate IP address format
     const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (!ipRegex.test(ipAddress)) {
+    if (!ipRegex.test(userData.ipAddress)) {
       error = 'Please enter a valid IP address';
       return;
     }
@@ -40,18 +42,20 @@
 
     try {
       const response = await api.post('/api/admin', {
-        username,
-        ports: selectedPorts,
-        ipAddress,
-        role
+        username: userData.username,
+        ports: userData.selectedPorts,
+        ipAddress: userData.ipAddress,
+        role: userData.role
       });
 
       if (response.success) {
         success = 'User created successfully!';
-        username = '';
-        selectedPorts = [];
-        ipAddress = '';
-        role = 'user';
+        userData = {
+          username: '',
+          selectedPorts: [],
+          ipAddress: '',
+          role: 'user'
+        };
         await loadUsers();
         
         setTimeout(() => {
@@ -68,19 +72,19 @@
   }
 
   function togglePort(port: number) {
-    if (selectedPorts.includes(port)) {
-      selectedPorts = selectedPorts.filter(p => p !== port);
+    if (userData.selectedPorts.includes(port)) {
+      userData.selectedPorts = userData.selectedPorts.filter(p => p !== port);
     } else {
-      selectedPorts = [...selectedPorts, port];
+      userData.selectedPorts = [...userData.selectedPorts, port];
     }
   }
 
   function selectAllPorts() {
-    selectedPorts = [...availablePorts];
+    userData.selectedPorts = [...availablePorts];
   }
 
   function clearAllPorts() {
-    selectedPorts = [];
+    userData.selectedPorts = [];
   }
 
   // Load users on component mount
@@ -184,7 +188,7 @@
           <input
             id="username"
             type="text"
-            bind:value={username}
+            bind:value={userData.username}
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
             placeholder="Enter username"
             disabled={isLoading}
@@ -199,7 +203,7 @@
           </label>
           <select
             id="role"
-            bind:value={role}
+            bind:value={userData.role}
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
             disabled={isLoading}
             required
@@ -221,7 +225,7 @@
           <input
             id="ipAddress"
             type="text"
-            bind:value={ipAddress}
+            bind:value={userData.ipAddress}
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
             placeholder="192.168.1.100"
             disabled={isLoading}
@@ -232,7 +236,7 @@
         <!-- Ports Selection -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">
-            Ports * ({selectedPorts.length} selected)
+            Ports * ({userData.selectedPorts.length} selected)
           </label>
           
           <div class="mb-3 flex gap-2">
@@ -260,7 +264,7 @@
                 <button
                   type="button"
                   on:click={() => togglePort(port)}
-                  class="w-10 h-10 cursor-pointer text-sm rounded-md border transition-colors {selectedPorts.includes(port) 
+                  class="w-10 h-10 cursor-pointer text-sm rounded-md border transition-colors {userData.selectedPorts.includes(port) 
                     ? 'bg-indigo-600 text-white border-indigo-600' 
                     : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}"
                   disabled={isLoading}
@@ -271,10 +275,10 @@
             </div>
           </div>
           
-          {#if selectedPorts.length > 0}
+          {#if userData.selectedPorts.length > 0}
             <div class="mt-2 p-2 bg-blue-50 rounded-md">
               <p class="text-sm text-blue-800">
-                Selected ports: {selectedPorts.sort((a, b) => a - b).join(', ')}
+                Selected ports: {userData.selectedPorts.sort((a, b) => a - b).join(', ')}
               </p>
             </div>
           {/if}
@@ -282,7 +286,7 @@
 
         <button
           type="submit"
-          disabled={isLoading || !username || selectedPorts.length === 0 || !ipAddress}
+          disabled={isLoading || !userData.username || userData.selectedPorts.length === 0 || !userData.ipAddress}
           class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {#if isLoading}
