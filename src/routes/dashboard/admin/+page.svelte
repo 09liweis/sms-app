@@ -148,12 +148,12 @@
         <div class="space-y-4">
           {#each users as user}
             <div class="border border-gray-200 rounded-lg p-4">
-              <div class="flex items-start justify-between">
+              <div class="flex items-start justify-between p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex-1">
                   <h3 class="font-medium text-gray-900">{user.username}</h3>
                   <button
                     on:click={() => editUser(user)}
-                    class="mt-2 text-sm text-indigo-600 hover:text-indigo-800"
+                    class="mt-2 px-3 py-1 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                   >
                     Edit
                   </button>
