@@ -98,6 +98,57 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+    <!-- Users List -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Existing Users</h2>
+      
+      {#if users.length === 0}
+        <div class="text-center py-8">
+          <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+          <p class="text-gray-500">No users created yet</p>
+          <p class="text-sm text-gray-400 mt-1">Create your first user to get started</p>
+        </div>
+      {:else}
+        <div class="space-y-4">
+          {#each users as user}
+            <div class="border border-gray-200 rounded-lg p-4">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <h3 class="font-medium text-gray-900">{user.username}</h3>
+                  <div class="mt-1 space-y-1">
+                    <p class="text-sm text-gray-600">
+                      <span class="font-medium">Role:</span> 
+                      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {
+                        user.role === 'admin' ? 'bg-red-100 text-red-800' :
+                        user.role === 'user' ? 'bg-blue-100 text-blue-800' :
+                        'bg-green-100 text-green-800'
+                      }">
+                        {user.role}
+                      </span>
+                    </p>
+                    <p class="text-sm text-gray-600">
+                      <span class="font-medium">IP:</span> {user.ipAddress}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                      <span class="font-medium">Ports:</span> 
+                      {#if Array.isArray(user.ports)}
+                        {user.ports.join(', ')}
+                      {:else}
+                        {user.port || 'N/A'}
+                      {/if}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {/each}
+        </div>
+      {/if}
+    </div>
+
     <!-- Create User Form -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <h2 class="text-xl font-semibold text-gray-900 mb-6">Create New User</h2>
@@ -209,7 +260,7 @@
                 <button
                   type="button"
                   on:click={() => togglePort(port)}
-                  class="w-10 h-10 text-sm rounded-md border transition-colors {selectedPorts.includes(port) 
+                  class="w-10 h-10 cursor-pointer text-sm rounded-md border transition-colors {selectedPorts.includes(port) 
                     ? 'bg-indigo-600 text-white border-indigo-600' 
                     : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}"
                   disabled={isLoading}
@@ -249,54 +300,5 @@
       </form>
     </div>
 
-    <!-- Users List -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h2 class="text-xl font-semibold text-gray-900 mb-6">Existing Users</h2>
-      
-      {#if users.length === 0}
-        <div class="text-center py-8">
-          <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-          </svg>
-          <p class="text-gray-500">No users created yet</p>
-          <p class="text-sm text-gray-400 mt-1">Create your first user to get started</p>
-        </div>
-      {:else}
-        <div class="space-y-4">
-          {#each users as user}
-            <div class="border border-gray-200 rounded-lg p-4">
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <h3 class="font-medium text-gray-900">{user.username}</h3>
-                  <div class="mt-1 space-y-1">
-                    <p class="text-sm text-gray-600">
-                      <span class="font-medium">Role:</span> 
-                      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {
-                        user.role === 'admin' ? 'bg-red-100 text-red-800' :
-                        user.role === 'user' ? 'bg-blue-100 text-blue-800' :
-                        'bg-green-100 text-green-800'
-                      }">
-                        {user.role}
-                      </span>
-                    </p>
-                    <p class="text-sm text-gray-600">
-                      <span class="font-medium">IP:</span> {user.ipAddress}
-                    </p>
-                    <p class="text-sm text-gray-600">
-                      <span class="font-medium">Ports:</span> 
-                      {#if Array.isArray(user.ports)}
-                        {user.ports.join(', ')}
-                      {:else}
-                        {user.port || 'N/A'}
-                      {/if}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {/each}
-        </div>
-      {/if}
-    </div>
   </div>
 </div>
