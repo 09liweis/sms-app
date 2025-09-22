@@ -19,7 +19,7 @@
 
 <div class="lg:flex min-h-screen bg-gray-50">
 	<Sidebar />
-	<main class="flex-1 lg:ml-0">
+	<main class="flex-1 lg:ml-0 max-h-screen overflow-y-auto">
 		{@render children?.()}
 	</main>
 </div>
