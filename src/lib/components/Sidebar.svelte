@@ -49,6 +49,7 @@
 						<h1 class="text-xl font-bold">{WEBSITE_NAME}</h1>
 					</div>
 					<button
+						aria-label="Close mobile menu"
 						onclick={closeMobileMenu}
 						class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-800 transition-colors"
 					>
