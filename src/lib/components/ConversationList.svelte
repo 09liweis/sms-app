@@ -56,7 +56,7 @@
 			{#each conversations as conversation }
 				<button
 					on:click={() => selectConversation(conversation.to)}
-					class="w-full p-4 text-left hover:bg-gray-50 border-b border-gray-100 transition-colors {selectedConversation === conversation.to ? 'bg-indigo-50 border-indigo-200' : ''}"
+					class="w-full cursor-pointer p-4 text-left hover:bg-gray-50 border-b border-gray-100 transition-colors {selectedConversation === conversation.to ? 'bg-indigo-50 border-indigo-200' : ''}"
 				>
 					<div class="flex items-start justify-between">
 						<div class="flex-1 min-w-0">

@@ -91,8 +91,9 @@
 		phoneNumber = formatPhoneNumber(target.value);
 	}
 
-	function handleSelectConversation(phoneNumber: string) {
+	function handleSelectConversation(to: string) {
 		showNewMessage = false;
+		phoneNumber = to;
 	}
 
 	function startNewMessage() {
