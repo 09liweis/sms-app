@@ -9,7 +9,9 @@ export interface User {
 	role:string;
 }
 
-export const user = writable<User | null>(null);
+const EMPTY_USER:User = {username:'',ports:[],ip_address:'',role:''};
+
+export const user = writable<User>(EMPTY_USER);
 export const isAuthenticated = writable(false);
 export const dashboardData = writable<PortStatus[]>([]);
 
@@ -55,7 +57,7 @@ export async function login(username: string, password: string): Promise<boolean
 }
 
 export function logout() {
-	user.set(null);
+	user.set(EMPTY_USER);
 	isAuthenticated.set(false);
 	localStorage.setItem('token', '');
 }

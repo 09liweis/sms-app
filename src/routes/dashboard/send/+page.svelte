@@ -5,6 +5,8 @@
     import { onMount } from 'svelte';
     import { api } from '$lib/utils/api';
   import { WEBSITE_NAME } from '$lib/constants/text';
+    import { user } from '$lib/stores/auth';
+    import PortsSelector from '$lib/components/PortsSelector.svelte';
 
 	let phoneNumber = $state('');
 	let message = $state('');
@@ -12,6 +14,7 @@
 	let success = $state(false);
 	let error = $state('');
 	let showNewMessage = $state(false);
+	let selectedPorts:number[] = $state([]);
 
 	const maxLength = 160;
 	const remainingChars = $derived(maxLength - message.length);
@@ -21,14 +24,21 @@
 	let loadingConversation = $state(true);
 
 	onMount(async()=>{
-		const {data} = await api.get('/api/sms');
-		loadingConversation = false;
-		conversations = data.conversations;
+		try {
+			const {success,data} = await api.get('/api/sms');
+			if (success) {
+				conversations = data.conversations;
+			}
+		} catch (error) {
+			console.error(error);
+		} finally {
+			loadingConversation = false;
+		}
 	});
 
 	async function handleSubmit() {
-		if (!phoneNumber || !message) {
-			error = 'Please fill in all fields';
+		if (!phoneNumber || !message || selectedPorts.length === 0) {
+			error = 'Please fill in all fields and select at least one port';
 			return;
 		}
 
@@ -49,7 +59,7 @@
 		success = false;
 
 		try {
-			await sendSMS(phoneNumber, message);
+			await sendSMS({to:phoneNumber, message,ports:selectedPorts});
 			success = true;
 			phoneNumber = '';
 			message = '';
@@ -157,6 +167,19 @@
 						disabled={isLoading}
 					/>
 					<p class="mt-1 text-sm text-gray-500">Include country code (e.g., +1 for US)</p>
+				</div>
+
+				<div>
+					<label for="ports" class="block text-sm font-medium text-gray-700 mb-2">
+						Ports
+					</label>
+					<PortsSelector ports={$user.ports} {selectedPorts} togglePort={(port:number)=>{
+						if(selectedPorts.includes(port)) {
+							selectedPorts = selectedPorts.filter((p) => p !== port);
+						} else {
+							selectedPorts = [...selectedPorts, port];
+						}
+					}} />
 				</div>
 
 				<div>

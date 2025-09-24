@@ -12,9 +12,9 @@ export interface SMSMessage {
 
 export const selectedConversation = writable<string | null>(null);
 
-export function sendSMS(to: string, message: string): Promise<boolean> {
+export function sendSMS({to,message,ports}:{to:string,message:string,ports:number[]}): Promise<boolean> {
 
-	api.post('/api/sms', { to, message })
+	api.post('/api/sms', { to, message,ports })
 		.then(response => {
 			if (response.success && response.data) {
 				const newMessage: SMSMessage = {

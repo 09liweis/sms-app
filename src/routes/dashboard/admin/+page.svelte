@@ -14,6 +14,8 @@
   let error = '';
   let users: any[] = [];
 
+  import PortsSelector from '$lib/components/PortsSelector.svelte';
+
   // Generate array of ports 1-64
   const availablePorts = Array.from({ length: 64 }, (_, i) => i + 1);
 

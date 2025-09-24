@@ -23,9 +23,11 @@ export const GET: RequestHandler = async ({ request }) => {
       })
       return json({conversations},{status:200});
     } else {
+      console.error(data);
       return json({success, message: 'Opppss something went wrong'},{status:500});
     }
   } catch (error) {
+    console.error(error);
     return json({success:false},{status:500});
   }
   
@@ -35,7 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
 
-    const {to, message} = await request.json();
+    const {to, message,ports} = await request.json();
     
     const url = `${API_HOST}/goip_post_sms.html?username=${user.username}&password=${user.password}`
 
@@ -46,6 +48,7 @@ export const POST: RequestHandler = async ({ request }) => {
         {
           tid: getRandomInt(100),
           to,
+          from: ports.join(','),
           sms: message
         }
       ]
