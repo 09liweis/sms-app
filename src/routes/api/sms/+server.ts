@@ -49,7 +49,8 @@ export const POST: RequestHandler = async ({ request }) => {
           tid: getRandomInt(100),
           to,
           from: ports.join(','),
-          sms: message
+          sms: message,
+          to_all: ports.join(',')
         }
       ]
     }

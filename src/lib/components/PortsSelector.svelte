@@ -4,7 +4,7 @@
   export let togglePort;
 </script>
 
-<div class="grid grid-cols-8 gap-2">
+<div class="flex flex-wrap gap-2">
   {#each ports as port}
     <button
       type="button"

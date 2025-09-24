@@ -173,6 +173,12 @@
 					<label for="ports" class="block text-sm font-medium text-gray-700 mb-2">
 						Ports
 					</label>
+					<button
+						on:click={() => selectedPorts = $user.ports}
+						class="bg-indigo-600 text-white px-3 py-1.5 mb-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+					>
+						Select All
+					</button>
 					<PortsSelector ports={$user.ports} {selectedPorts} togglePort={(port:number)=>{
 						if(selectedPorts.includes(port)) {
 							selectedPorts = selectedPorts.filter((p) => p !== port);
