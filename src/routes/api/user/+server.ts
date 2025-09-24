@@ -7,7 +7,7 @@ export const GET: RequestHandler = async ({ request }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
     if (user) {
-      const {data, error} = await supabase.from('user_profiles').select('username,sms_quote').single();
+      const {data, error} = await supabase.from('user_profiles').select('*').eq('username', user.username).single();
       if (error) {
         return json({ success: false, message: error.message }, { status: 500  }); 
       }

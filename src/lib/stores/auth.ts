@@ -4,6 +4,9 @@ import type { PortStatus } from '$lib/types/sms';
 
 export interface User {
 	username: string;
+	ports:number[];
+	ip_address:string;
+	role:string;
 }
 
 export const user = writable<User | null>(null);
@@ -15,6 +18,15 @@ export async function getDashboardData(opt:any) {
 	if (success) {
 		dashboardData.set(data);
 	}
+}
+
+export async function isUserLogin() {
+	const {success, data} = await sendRequest(`/api/user`);
+	if (success && data.user) {
+		isAuthenticated.set(true);
+		user.set(data.user);
+	}
+	return success;
 }
 
 export async function login(username: string, password: string): Promise<boolean> {

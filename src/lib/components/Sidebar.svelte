@@ -19,6 +19,12 @@
 		isMobileMenuOpen = false;
 	}
 	const currentPath = $derived($page.url.pathname);
+
+	const menuItems = [
+		{ path: '/dashboard', label: 'Dashboard', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+		{ path: '/dashboard/send', label: 'Send SMS', icon: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' },
+		{ path: '/dashboard/admin', label: 'Admin', icon: 'M12 15l8-8m0 0l-8-8m8 8H4m4 4a4 4 0 01-4-4', role: 'admin' },
+	];
 </script>
 
 <!-- Mobile menu button -->
@@ -62,30 +68,22 @@
 
 			<nav class="flex-1 px-4">
 				<ul class="space-y-2">
-					<li>
-						<a
-							href="/dashboard"
-							onclick={closeMobileMenu}
-							class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
-						>
-							<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-							</svg>
-							Dashboard
-						</a>
-					</li>
-					<li>
-						<a
-							href="/dashboard/send"
-							onclick={closeMobileMenu}
-							class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard/send' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
-						>
-							<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-							</svg>
-							Send SMS
-						</a>
-					</li>
+					{#each menuItems as item}
+						{#if !item.role || (item.role === 'admin' && $user?.role === 'admin')}
+							<li>
+								<a
+									href={item.path}
+									onclick={closeMobileMenu}
+									class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === item.path ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
+								>
+									<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon}></path>
+									</svg>
+									{item.label}
+								</a>
+							</li>
+						{/if}
+					{/each}
 				</ul>
 			</nav>
 
@@ -124,39 +122,21 @@
 
 	<nav class="flex-1 px-4">
 		<ul class="space-y-2">
-			<li>
-				<a
-					href="/dashboard"
-					class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
-				>
-					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-					</svg>
-					Dashboard
-				</a>
-			</li>
-			<li>
-				<a
-					href="/dashboard/send"
-					class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard/send' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
-				>
-					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-					</svg>
-					Send SMS
-				</a>
-			</li>
-			<li>
-				<a
-					href="/dashboard/admin"
-					class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === '/dashboard/admin' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
-				>
-					<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15l8-8m0 0l-8-8m8 8H4m4 4a4 4 0 01-4-4"></path>
-					</svg>
-					Admin
-				</a>
-			</li>
+			{#each menuItems as item}
+				{#if !item.role || (item.role === 'admin' && $user?.role === 'admin')}
+					<li>
+						<a
+							href={item.path}
+							class="flex items-center px-4 py-3 rounded-lg transition-colors {currentPath === item.path ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}"
+						>
+							<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={item.icon}></path>
+							</svg>
+							{item.label}
+						</a>
+					</li>
+				{/if}
+			{/each}
 		</ul>
 	</nav>
 

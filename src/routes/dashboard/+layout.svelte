@@ -1,19 +1,16 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { isAuthenticated } from '$lib/stores/auth';
+	import { isUserLogin } from '$lib/stores/auth';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 
 	let { children } = $props();
 
-	onMount(() => {
-		const unsubscribe = isAuthenticated.subscribe(value => {
-			if (!value) {
-				// goto('/');
-			}
-		});
-
-		return unsubscribe;
+	onMount(async() => {
+		const isLogin = await isUserLogin();
+		if (!isLogin) {
+			return goto('/');
+		}
 	});
 </script>
 

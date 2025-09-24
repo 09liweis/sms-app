@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { login } from '$lib/stores/auth';
+	import { isUserLogin, login } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
     import { api } from '$lib/utils/api';
@@ -12,9 +12,9 @@
 	let showPassword = false;
 
 	onMount(async () => {
-		const {success, data:{user}} = await api.get('/api/user');
+		const isLogin = await isUserLogin();
 		
-		if (user) {
+		if (isLogin) {
 			goto('/dashboard');
 		}
 	});

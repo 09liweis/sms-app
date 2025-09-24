@@ -24,8 +24,10 @@ export const POST: RequestHandler = async ({ request }) => {
     const {data,error} = await supabase.from('user_profiles').upsert([
             { username, last_login: new Date() }
           ], { onConflict: 'username' }).single();
+    
+    const {data: curUser} = await supabase.from('user_profiles').select('*').eq('username',username).single();
 
-    return json({ success: true, message: 'Login successful', jwt, user:{username} }, { status: 200 }); 
+    return json({ success: true, message: 'Login successful', jwt, user:curUser }, { status: 200 }); 
   } catch (error) {
     console.error(error);
     return json({success: false,  message: 'Opppss something went wrong'}, { status: 500  });
