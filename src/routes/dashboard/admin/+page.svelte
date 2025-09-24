@@ -30,20 +30,13 @@
       return;
     }
 
-    // Validate IP address format
-    const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (!ipRegex.test(userData.ipAddress)) {
-      error = 'Please enter a valid IP address';
-      return;
-    }
-
     isLoading = true;
     error = '';
     success = '';
 
     try {
       const response = editingUser
-        ? await api.put(`/api/admin/${editingUser.id}`, {
+        ? await api.put(`/api/admin/${editingUser.username}`, {
             username: userData.username,
             ports: userData.selectedPorts,
             ipAddress: userData.ipAddress,

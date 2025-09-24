@@ -31,12 +31,6 @@ export const POST: RequestHandler = async ({ request }) => {
       return json({ error: 'All ports must be between 1 and 64' }, { status: 400 });
     }
 
-    // Validate IP address format
-    const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (!ipRegex.test(ipAddress)) {
-      return json({ error: 'Invalid IP address format' }, { status: 400 });
-    }
-
     // Validate role
     if (!['admin', 'user', 'sms_only'].includes(role)) {
       return json({ error: 'Invalid role' }, { status: 400 });
