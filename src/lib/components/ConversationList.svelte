@@ -61,7 +61,7 @@
 					<div class="flex items-start justify-between">
 						<div class="flex-1 min-w-0">
 							<div class="flex items-center justify-between mb-1">
-								<p class="text-sm font-medium text-gray-900 truncate">
+								<p class="text-sm font-medium text-gray-900">
 									{conversation.to}
 							</p>
 							<!-- {#if conversation.unreadCount > 0}
@@ -70,7 +70,7 @@
 								</span>
 							{/if} -->
 						</div>
-						<p class="text-sm text-gray-600 truncate">
+						<p class="text-sm text-gray-600">
 							{conversation.message}
 						</p>
 						<p class="text-xs text-gray-400 mt-1">

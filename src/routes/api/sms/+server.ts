@@ -12,13 +12,17 @@ export const GET: RequestHandler = async ({ request }) => {
     const {success, data} = await api.get(url);
 
     if (success) {
-      const conversations = data.data.map((item: any[]) => {
-        return {
-          sent: item[0],
-          timestamp: new Date(item[2] * 1000),
-          from: item[3],
-          to: item[4],
-          message: atob(item[5]),
+      const conversations:any[] = [];
+      data.data.forEach((item: any) => {
+        const from = item[3];
+        if (!['1011','433299'].includes(from)) {
+          conversations.push({
+            sent: item[0],
+            timestamp: new Date(item[2] * 1000),
+            from: item[3],
+            to: item[4],
+            message: atob(item[5]),
+          })
         }
       })
       return json({conversations},{status:200});
