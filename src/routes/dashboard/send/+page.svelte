@@ -223,7 +223,6 @@
 
 				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 space-y-4 sm:space-y-0">
 					<div class="text-sm text-gray-600 order-2 sm:order-1">
-						<p>Estimated cost: <span class="font-semibold">$0.05</span></p>
 					</div>
 					<button
 						type="submit"
