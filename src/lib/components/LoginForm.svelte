@@ -44,7 +44,7 @@
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-	<div class="max-w-md w-full bg-white/60 rounded-2xl shadow-xl p-8">
+	<div class="max-w-md w-full bg-white/60 rounded-2xl shadow-xl p-5">
 		<div class="text-center mb-8">
 			<div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
 				<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
