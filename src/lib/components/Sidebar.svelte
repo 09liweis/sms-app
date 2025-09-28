@@ -30,6 +30,7 @@
 <!-- Mobile menu button -->
 <div class="lg:hidden bg-white border-b border-gray-200 p-4">
 	<button
+		aria-label="Open mobile menu"
 		onclick={toggleMobileMenu}
 		class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
 	>
