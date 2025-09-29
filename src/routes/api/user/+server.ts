@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { supabase } from '$lib/supabase';
+import { ERROR_MESSAGE } from '$lib/constants/text';
 
 export const GET: RequestHandler = async ({ request }) => {
   try {
@@ -19,6 +20,6 @@ export const GET: RequestHandler = async ({ request }) => {
 
   } catch (error) {
     console.error(error);
-    return json({success: false,  message: 'Opppss something went wrong'}, { status: 500  });
+    return json({success: false,  message: ERROR_MESSAGE}, { status: 500  });
   }
 };
