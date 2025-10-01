@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { supabase } from '$lib/supabase';
-import { ERROR_MESSAGE } from '$lib/constants/text';
+import { ERROR_MESSAGE, UNAUTHORIZED_MESSAGE } from '$lib/constants/text';
 
 export const GET: RequestHandler = async ({ request }) => {
   try {
@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ request }) => {
 
       return json({ user:data }, { status: 200 }); 
     } else {
-      return json({ success: false, message: 'Unauthorized' }, { status: 401  });
+      return json({ success: false, message: UNAUTHORIZED_MESSAGE }, { status: 401  });
     }
 
   } catch (error) {
