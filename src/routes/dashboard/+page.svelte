@@ -18,7 +18,7 @@
 
 	onMount(() => {
 		fetchDashboardData();
-		fetchTasks();
+		// fetchTasks();
 		
 		const interval = setInterval(() => {
 			getDashboardData({type: selectedType});
