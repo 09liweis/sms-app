@@ -38,7 +38,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const sender = formatCanadianPhoneNumber(to);
     
-    const url = `${API_HOST}/goip_post_sms.html?username=${user.username}&password=${user.password}`
+    const url = `${user.ip_address}/goip_post_sms.html?username=${user.username}&password=${user.password}`
 
     const body = {
       type: 'send-sms',
