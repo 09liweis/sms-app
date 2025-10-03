@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ request }) => {
 
     const urlParams = new URL(request.url).searchParams;
     const type = urlParams.get('type') || '3';
-    const url = `${API_HOST}/goip_get_sms_stat.html?username=${user.username}&password=${user.password}&type=${type}`;
+    const url = `${user.ip_address}/goip_get_sms_stat.html?username=${user.username}&password=${user.password}&type=${type}`;
 
     const response = await sendRequest(url);
     const { data: {code, reason, stats}, success } = response;
