@@ -20,6 +20,7 @@ export const GET: RequestHandler = async ({ request }) => {
     const { data: {code, reason, stats}, success } = response;
     
     if (response?.data?.code === 1) {
+      console.error('Dashboard error: ',reason);
       return json({ success: false, message: response?.data?.reason }, { status: 401 });
     }
 
