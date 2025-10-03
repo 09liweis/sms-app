@@ -13,7 +13,6 @@ export const GET: RequestHandler = async ({ request }) => {
     // const {success, data} = await api.get(url);
     const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('is_new', true).order('created_at', { ascending: false });
     if (data) {
-      console.log(data);
       return json({conversations:data},{status:200});
     } else {
       console.error(error);
