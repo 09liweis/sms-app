@@ -6,6 +6,8 @@
 
 	let messages: SMSMessage[] = $state([]);
 	let loading = $state(true);
+	let replyMessage = $state('');
+	let sending = $state(false);
 
 	onMount(() => {
 		loadMessages();
@@ -22,6 +24,7 @@
 	$effect(() => {
 		if ($selectedConversation) {
 			loadMessages();
+			replyMessage = '';
 		}
 	});
 
@@ -38,6 +41,35 @@
 			console.error('Failed to load messages:', error);
 		} finally {
 			loading = false;
+		}
+	}
+
+	async function handleSendReply() {
+		if (!replyMessage.trim() || !$selectedConversation || sending) return;
+
+		sending = true;
+		try {
+			const { success } = await api.post('/api/sms', {
+				to: $selectedConversation.sender,
+				message: replyMessage,
+				ports: $selectedConversation.port ? [$selectedConversation.port] : []
+			});
+
+			if (success) {
+				replyMessage = '';
+				await loadMessages();
+			}
+		} catch (error) {
+			console.error('Failed to send reply:', error);
+		} finally {
+			sending = false;
+		}
+	}
+
+	function handleKeypress(event: KeyboardEvent) {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			handleSendReply();
 		}
 	}
 </script>
@@ -89,5 +121,34 @@
 				</div>
 			{/each}
 		{/if}
+	</div>
+
+	<div class="border-t border-gray-200 p-4 bg-white">
+		<form onsubmit={(e) => { e.preventDefault(); handleSendReply(); }} class="flex gap-2">
+			<textarea
+				bind:value={replyMessage}
+				onkeypress={handleKeypress}
+				placeholder="Type a message..."
+				rows="1"
+				disabled={sending || !$selectedConversation}
+				class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+			></textarea>
+			<button
+				type="submit"
+				disabled={sending || !replyMessage.trim() || !$selectedConversation}
+				class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+			>
+				{#if sending}
+					<div class="flex items-center gap-2">
+						<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+						<span>Sending...</span>
+					</div>
+				{:else}
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+					</svg>
+				{/if}
+			</button>
+		</form>
 	</div>
 </div>
