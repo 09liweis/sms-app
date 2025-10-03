@@ -19,13 +19,12 @@ export const POST: RequestHandler = async ({ request }) => {
       return json({ success: false, message: reason }, { status: 401 });
     }
 
-    const jwt = generateToken(username, password);
-
     const {data,error} = await supabase.from('user_profiles').upsert([
             { username, last_login: new Date() }
           ], { onConflict: 'username' }).single();
     
     const {data: curUser} = await supabase.from('user_profiles').select('*').eq('username',username).single();
+    const jwt = generateToken({username, password, ip_address:curUser.ip_address});
 
     return json({ success: true, message: 'Login successful', jwt, user:curUser }, { status: 200 }); 
   } catch (error) {
