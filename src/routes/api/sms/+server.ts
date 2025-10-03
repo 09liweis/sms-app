@@ -6,6 +6,11 @@ import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { api } from '$lib/utils/api';
 import { supabase } from '$lib/supabase';
 
+function formatCanadianPhoneNumber(phoneNumber: string): string {
+  const cleanedNumber = phoneNumber.replace(/\+/g, '');
+  return cleanedNumber.length < 10 ? '1' + cleanedNumber : cleanedNumber;
+}
+
 export const GET: RequestHandler = async ({ request }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
@@ -30,6 +35,8 @@ export const POST: RequestHandler = async ({ request }) => {
     const user = await getAndDecodeTokenFromHeader(request);
 
     const {to, message,ports} = await request.json();
+
+    const sender = formatCanadianPhoneNumber(to);
     
     const url = `${API_HOST}/goip_post_sms.html?username=${user.username}&password=${user.password}`
 
@@ -39,7 +46,7 @@ export const POST: RequestHandler = async ({ request }) => {
       tasks: [
         {
           tid: getRandomInt(100),
-          to,
+          to: sender,
           from: ports.join(','),
           sms: message,
           to_all: ports.join(',')
@@ -47,6 +54,15 @@ export const POST: RequestHandler = async ({ request }) => {
       ]
     }
     const {success, data} = await api.post(url, body);
+    if (success) {
+      const {error: insertMessageError} = await supabase.from('messages').insert({
+        ip: user.ip_address,
+        receiver: user.username,
+        sender,
+        message,
+        type: 'sent'
+      })
+    }
     console.log(data);
 
     return json({ success, message: 'Send SMS successful' }, { status: data.code });
