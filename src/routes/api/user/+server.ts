@@ -13,6 +13,10 @@ export const GET: RequestHandler = async ({ request }) => {
         return json({ success: false, message: error.message }, { status: 500  }); 
       }
 
+      if (data.role === 'admin') {
+        data.ports = Array.from({ length: 63 }, (_, i) => `${i + 1}`);
+      }
+
       return json({ user:data }, { status: 200 }); 
     } else {
       return json({ success: false, message: UNAUTHORIZED_MESSAGE }, { status: 401  });
