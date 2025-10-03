@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sendSMS, selectedConversation } from '$lib/stores/sms';
+	import { sendSMS, selectedConversation, type SMSMessage } from '$lib/stores/sms';
 	import ConversationList from '$lib/components/ConversationList.svelte';
 	import ConversationView from '$lib/components/ConversationView.svelte';
     import { onMount } from 'svelte';
@@ -91,9 +91,10 @@
 		phoneNumber = formatPhoneNumber(target.value);
 	}
 
-	function handleSelectConversation(to: string) {
+	function handleSelectConversation(conversation: SMSMessage) {
 		showNewMessage = false;
-		phoneNumber = to;
+		phoneNumber = conversation.sender;
+		selectedConversation.set(conversation);
 	}
 
 	function startNewMessage() {
@@ -243,31 +244,6 @@
 					</button>
 				</div>
 			</form>
-
-					<!-- Quick Tips -->
-					<div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-						<h3 class="text-lg font-semibold text-blue-900 mb-3">Quick Tips</h3>
-						<ul class="space-y-2 text-sm text-blue-800">
-							<li class="flex items-start">
-								<svg class="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								Keep messages under 160 characters to avoid additional charges
-							</li>
-							<li class="flex items-start">
-								<svg class="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								Always include country code for international numbers
-							</li>
-							<li class="flex items-start">
-								<svg class="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								Avoid sending promotional messages during late hours
-							</li>
-						</ul>
-					</div>
 				</div>
 			{:else}
 				<!-- Conversation View -->

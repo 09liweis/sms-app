@@ -5,12 +5,7 @@
 	export let loading:boolean;
 	export let conversations:SMSMessage[];
 	export let selectedConversation = '';
-	export let onSelectConversation: (phoneNumber: string) => void;
-
-	function selectConversation(phoneNumber: string) {
-		// selectedConversation.set(phoneNumber);
-		onSelectConversation?.(phoneNumber);
-	}
+	export let onSelectConversation: (conversation: SMSMessage) => void;
 
 	function formatTime(date: Date): string {
 		const now = new Date();
@@ -55,7 +50,7 @@
 		{:else}
 			{#each conversations as conversation }
 				<button
-					on:click={() => selectConversation(conversation.sender)}
+					on:click={() => onSelectConversation(conversation)}
 					class="w-full cursor-pointer p-4 text-left hover:bg-gray-50 border-b border-gray-100 transition-colors {selectedConversation === conversation.sender ? 'bg-indigo-50 border-indigo-200' : ''}"
 				>
 					<div class="flex items-start justify-between">

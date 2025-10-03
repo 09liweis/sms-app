@@ -11,11 +11,24 @@ function formatCanadianPhoneNumber(phoneNumber: string): string {
   return cleanedNumber.length < 10 ? '1' + cleanedNumber : cleanedNumber;
 }
 
-export const GET: RequestHandler = async ({ request }) => {
+export const GET: RequestHandler = async ({ request, url }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
     // const url = `${user.ip_address}/goip_get_sms.html?username=${user.username}&password=${user.password}`
     // const {success, data} = await api.get(url);
+
+    const port = url.searchParams.get('port');
+    const sender = url.searchParams.get('sender');
+
+    if (port && sender) {
+      const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('port', port).eq('sender', sender).order('created_at', { ascending: false });
+      if (error) {
+        console.error(error);
+        return json({success:false, message: error.message},{status:500});
+      }
+      return json({conversations:data},{status:200});
+    }
+
     const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('type', 'received').eq('is_new', true).order('created_at', { ascending: false });
     if (data) {
       return json({conversations:data},{status:200});
