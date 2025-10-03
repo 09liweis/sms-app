@@ -21,7 +21,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
     const sender = url.searchParams.get('sender');
 
     if (port && sender) {
-      const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('port', port).eq('sender', sender).order('created_at', { ascending: false });
+      const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('port', port).eq('sender', sender).order('created_at', { ascending: true });
       if (error) {
         console.error(error);
         return json({success:false, message: error.message},{status:500});
