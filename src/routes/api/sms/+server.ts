@@ -4,31 +4,20 @@ import { API_HOST } from '$env/static/private';
 import { getRandomInt } from '$lib/utils/helper';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { api } from '$lib/utils/api';
+import { supabase } from '$lib/supabase';
 
 export const GET: RequestHandler = async ({ request }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
-    const url = `${API_HOST}/goip_get_sms.html?username=${user.username}&password=${user.password}`
-    const {success, data} = await api.get(url);
-
-    if (success) {
-      const conversations:any[] = [];
-      data.data.forEach((item: any) => {
-        const from = item[3];
-        if (!['1011','433299'].includes(from)) {
-          conversations.push({
-            sent: item[0],
-            timestamp: new Date(item[2] * 1000),
-            from: item[3],
-            to: item[4],
-            message: atob(item[5]),
-          })
-        }
-      })
-      return json({conversations},{status:200});
+    // const url = `${user.ip_address}/goip_get_sms.html?username=${user.username}&password=${user.password}`
+    // const {success, data} = await api.get(url);
+    const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).order('created_at', { ascending: false });
+    if (data) {
+      console.log(data);
+      return json({conversations:data},{status:200});
     } else {
-      console.error(data);
-      return json({success, message: 'Opppss something went wrong'},{status:500});
+      console.error(error);
+      return json({success:false, message: 'Opppss something went wrong'},{status:500});
     }
   } catch (error) {
     console.error(error);

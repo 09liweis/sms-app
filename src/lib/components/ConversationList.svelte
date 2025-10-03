@@ -55,14 +55,14 @@
 		{:else}
 			{#each conversations as conversation }
 				<button
-					on:click={() => selectConversation(conversation.to)}
-					class="w-full cursor-pointer p-4 text-left hover:bg-gray-50 border-b border-gray-100 transition-colors {selectedConversation === conversation.to ? 'bg-indigo-50 border-indigo-200' : ''}"
+					on:click={() => selectConversation(conversation.sender)}
+					class="w-full cursor-pointer p-4 text-left hover:bg-gray-50 border-b border-gray-100 transition-colors {selectedConversation === conversation.sender ? 'bg-indigo-50 border-indigo-200' : ''}"
 				>
 					<div class="flex items-start justify-between">
 						<div class="flex-1 min-w-0">
 							<div class="flex items-center justify-between mb-1">
 								<p class="text-sm font-medium text-gray-900">
-									{conversation.to}
+									{conversation.sender}
 							</p>
 							<!-- {#if conversation.unreadCount > 0}
 								<span class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-indigo-600 rounded-full">
@@ -74,7 +74,7 @@
 							{conversation.message}
 						</p>
 						<p class="text-xs text-gray-400 mt-1">
-							{conversation.timestamp}
+							{conversation.created_at}
 						</p>
 					</div>
 				</div>
