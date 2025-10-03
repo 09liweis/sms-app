@@ -11,7 +11,7 @@ export const GET: RequestHandler = async ({ request }) => {
     const user = await getAndDecodeTokenFromHeader(request);
     // const url = `${user.ip_address}/goip_get_sms.html?username=${user.username}&password=${user.password}`
     // const {success, data} = await api.get(url);
-    const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).order('created_at', { ascending: false });
+    const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('is_new', true).order('created_at', { ascending: false });
     if (data) {
       console.log(data);
       return json({conversations:data},{status:200});

@@ -16,10 +16,12 @@ export const POST: RequestHandler = async ({ request, url }) => {
       "port": body.match(/Slot: "([^"]+)"/)?.[1],
       "message": lastLine,
       ip,
-      type: 'received'
+      type: 'received',
+      is_new: true
     };
     console.log('Parsed SMS:', parsedBody);
-    
+
+    const {error:updateError} = await supabase.from('messages').update({is_new:false}).eq('ip',ip).eq('sender',parsedBody.sender).eq('port',parsedBody.port);
     const {error} = await supabase.from('messages').insert(parsedBody);
     if (error) {
       console.error('Insert receive sms error: ', error);
