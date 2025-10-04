@@ -22,6 +22,10 @@ export const POST: RequestHandler = async ({ request, url }) => {
     console.log('Parsed SMS:', parsedBody);
 
     const {error:updateError} = await supabase.from('messages').update({is_new:false}).eq('ip',ip).eq('is_new',true).eq('sender',parsedBody.sender).eq('port',parsedBody.port);
+    if (updateError) {
+      console.error('Update receive sms error: ', updateError);
+      return json({ success: false, message: updateError.message }, { status: 500  }); 
+    }
     const {error} = await supabase.from('messages').insert(parsedBody);
     if (error) {
       console.error('Insert receive sms error: ', error);
