@@ -4,6 +4,7 @@ import { sendRequest } from '$lib/utils/api';
 import { generateToken } from '$lib/utils/jwt';
 import { API_HOST } from '$env/static/private';
 import { supabase } from '$lib/supabase';
+import { ERROR_MESSAGE } from '$lib/constants/text';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
@@ -26,6 +27,6 @@ export const POST: RequestHandler = async ({ request }) => {
     return json({ success: true, message: 'Login successful', jwt, user:curUser }, { status: 200 }); 
   } catch (error) {
     console.error(error);
-    return json({success: false,  message: 'Opppss something went wrong'}, { status: 500  });
+    return json({success: false,  message: ERROR_MESSAGE}, { status: 500  });
   }
 };
