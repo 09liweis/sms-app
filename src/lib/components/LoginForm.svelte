@@ -78,7 +78,7 @@
 				<button
 					type="button"
 					on:click={() => showPassword = !showPassword}
-					class="absolute cursor-pointer inset-y-0 right-0 flex items-center pr-3 text-gray-600 hover:text-indigo-600"
+					class="absolute cursor-pointer inset-y-0 right-0 top-6 flex items-center pr-3 text-gray-600 hover:text-indigo-600"
 				>
 					{#if showPassword}
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
