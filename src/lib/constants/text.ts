@@ -5,3 +5,4 @@ export const UNAUTHORIZED_MESSAGE = 'Unauthorized';
 
 export const USER_PROFILES_TABLE = 'user_profiles';
 export const MESSAGES_TABLE = 'messages';
+export const AUTH_SUCCESS_MESSAGE = 'Authentication successful';
