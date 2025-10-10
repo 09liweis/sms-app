@@ -66,17 +66,25 @@ export const POST: RequestHandler = async ({ request }) => {
         }
       ]
     }
+
+    console.log(body, url);
+
     const {success, data} = await api.post(url, body);
+    console.log(data);
     if (success) {
       const {error: insertMessageError} = await supabase.from('messages').insert({
         ip: user.ip_address,
         receiver: user.username,
         sender,
         message,
+        port: ports.join(','),
         type: 'sent'
       })
+      if (insertMessageError) {
+        console.error(insertMessageError);
+        return json({ success: false, message: insertMessageError.message }, { status: 500  }); 
+      }
     }
-    console.log(data);
 
     return json({ success, message: 'Send SMS successful' }, { status: data.code });
   } catch (error) {

@@ -2,7 +2,7 @@
 	import { sendSMS, selectedConversation, type SMSMessage } from '$lib/stores/sms';
 	import ConversationList from '$lib/components/ConversationList.svelte';
 	import ConversationView from '$lib/components/ConversationView.svelte';
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { api } from '$lib/utils/api';
   import { WEBSITE_NAME } from '$lib/constants/text';
     import { user } from '$lib/stores/auth';
@@ -24,6 +24,18 @@
 	let loadingConversation = $state(true);
 
 	onMount(async()=>{
+		loadConversations();
+
+		const interval = setInterval(() => {
+			loadConversations();
+		}, 5000);
+
+		onDestroy(() => {
+			clearInterval(interval);
+		});
+	});
+
+	const loadConversations = async () => {
 		try {
 			const {success,data} = await api.get('/api/sms');
 			if (success) {
@@ -34,7 +46,7 @@
 		} finally {
 			loadingConversation = false;
 		}
-	});
+	}
 
 	async function handleSubmit() {
 		if (!phoneNumber || !message || selectedPorts.length === 0) {

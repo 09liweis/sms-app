@@ -31,11 +31,18 @@
 	async function loadMessages() {
 		if (!$selectedConversation) return;
 
-		loading = true;
 		try {
 			const { success, data } = await api.get(`/api/sms?port=${$selectedConversation.port}&sender=${$selectedConversation.sender}`);
 			if (success && data.conversations) {
 				messages = data.conversations;
+
+				const messagesContainer = document.querySelector('#messages-container');
+				if (messagesContainer) {
+					messagesContainer.scrollTo({
+						top: messagesContainer.scrollHeight,
+						behavior: 'smooth'
+					});
+				}
 			}
 		} catch (error) {
 			console.error('Failed to load messages:', error);
@@ -84,7 +91,7 @@
 		</div>
 	</div>
 
-	<div class="flex-1 overflow-y-auto p-4 space-y-4">
+	<div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-4">
 		{#if loading}
 			<div class="flex items-center justify-center h-full">
 				<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
