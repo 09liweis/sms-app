@@ -9,7 +9,7 @@ interface User {
 }
 
 export const generateToken = (user: User): string => {
-  return jwt.sign({ username: user.username, password: user.password, ip_address: user.ip_address }, JWT_SECRET, { expiresIn: '1d' });
+  return jwt.sign({ username: user.username, password: user.password, ip_address: user.ip_address }, JWT_SECRET, { expiresIn: '1w' });
 };
 
 export const decodeToken = (token: string): User => {
