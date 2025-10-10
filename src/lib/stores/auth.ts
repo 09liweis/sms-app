@@ -40,20 +40,6 @@ export async function login(username: string, password: string): Promise<boolean
 		user.set(curUser);
 	}
 	return success;
-
-	// Example of how to use the API wrapper for real authentication:
-	/*
-	return api.post('/auth/login', { email, password })
-		.then(response => {
-			if (response.success && response.data) {
-				user.set(response.data.user);
-				isAuthenticated.set(true);
-				return true;
-			}
-			return false;
-		})
-		.catch(() => false);
-	*/
 }
 
 export function logout() {
