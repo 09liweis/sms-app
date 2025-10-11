@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { selectedConversation } from '$lib/stores/sms';
 	import type { SMSMessage } from '$lib/stores/sms';
 	import { onMount } from 'svelte';
 	import { api } from '$lib/utils/api';
 
+	let { selectedConversation } = $props();
+	
 	let messages: SMSMessage[] = $state([]);
 	let loading = $state(true);
 	let replyMessage = $state('');
@@ -13,7 +14,7 @@
 		loadMessages();
 
 		const interval = setInterval(() => {
-			if ($selectedConversation) {
+			if (selectedConversation) {
 				loadMessages();
 			}
 		}, 5000);
@@ -22,17 +23,18 @@
 	});
 
 	$effect(() => {
-		if ($selectedConversation) {
+		if (selectedConversation) {
+			loading = true;
 			loadMessages();
 			replyMessage = '';
 		}
 	});
 
 	async function loadMessages() {
-		if (!$selectedConversation) return;
+		if (!selectedConversation) return;
 
 		try {
-			const { success, data } = await api.get(`/api/sms?port=${$selectedConversation.port}&sender=${$selectedConversation.sender}`);
+			const { success, data } = await api.get(`/api/sms?port=${selectedConversation.port}&sender=${selectedConversation.sender}`);
 			if (success && data.conversations) {
 				messages = data.conversations;
 
@@ -52,14 +54,14 @@
 	}
 
 	async function handleSendReply() {
-		if (!replyMessage.trim() || !$selectedConversation || sending) return;
+		if (!replyMessage.trim() || !selectedConversation || sending) return;
 
 		sending = true;
 		try {
 			const { success } = await api.post('/api/sms', {
-				to: $selectedConversation.sender,
+				to: selectedConversation.sender,
 				message: replyMessage,
-				ports: $selectedConversation.port ? [$selectedConversation.port] : []
+				ports: selectedConversation.port ? [selectedConversation.port] : []
 			});
 
 			if (success) {
@@ -85,7 +87,7 @@
 	<div class="border-b border-gray-200 p-4 bg-gray-50">
 		<div class="flex items-center justify-between">
 			<div>
-				<h3 class="text-lg font-semibold text-gray-900">{$selectedConversation?.sender}</h3>
+				<h3 class="text-lg font-semibold text-gray-900">{selectedConversation?.sender}</h3>
 				<p class="text-sm text-gray-500">{messages.length} messages</p>
 			</div>
 		</div>
@@ -137,12 +139,12 @@
 				onkeypress={handleKeypress}
 				placeholder="Type a message..."
 				rows="1"
-				disabled={sending || !$selectedConversation}
+				disabled={sending || !selectedConversation}
 				class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
 			></textarea>
 			<button
 				type="submit"
-				disabled={sending || !replyMessage.trim() || !$selectedConversation}
+				disabled={sending || !replyMessage.trim() || !selectedConversation}
 				class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
 			>
 				{#if sending}

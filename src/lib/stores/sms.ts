@@ -15,9 +15,6 @@ export interface SMSMessage {
 	type?: string;
 }
 
-
-export const selectedConversation = writable<SMSMessage | null>(null);
-
 export function sendSMS({to,message,ports}:{to:string,message:string,ports:number[]}): Promise<boolean> {
 
 	api.post('/api/sms', { to, message,ports })

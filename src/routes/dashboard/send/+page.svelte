@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sendSMS, selectedConversation, type SMSMessage } from '$lib/stores/sms';
+	import { sendSMS, type SMSMessage } from '$lib/stores/sms';
 	import ConversationList from '$lib/components/ConversationList.svelte';
 	import ConversationView from '$lib/components/ConversationView.svelte';
     import { onDestroy, onMount } from 'svelte';
@@ -22,6 +22,7 @@
 
 	let conversations = $state([]);
 	let loadingConversation = $state(true);
+	let selectedConversation:SMSMessage|null = $state(null);
 
 	onMount(async()=>{
 		loadConversations();
@@ -106,11 +107,11 @@
 	function handleSelectConversation(conversation: SMSMessage) {
 		showNewMessage = false;
 		phoneNumber = conversation.sender;
-		selectedConversation.set(conversation);
+		selectedConversation = conversation;
 	}
 
 	function startNewMessage() {
-		selectedConversation.set(null);
+		selectedConversation = null;
 		showNewMessage = true;
 		phoneNumber = '';
 		message = '';
@@ -143,13 +144,13 @@
 						New SMS
 					</button>
 				</div>
-				<ConversationList loading={loadingConversation} conversations={conversations} onSelectConversation={handleSelectConversation} />
+				<ConversationList {selectedConversation} loading={loadingConversation} conversations={conversations} onSelectConversation={handleSelectConversation} />
 			</div>
 		</div>
 
 		<!-- Main Content Area -->
 		<div class="flex-1 flex flex-col">
-			{#if showNewMessage || !$selectedConversation}
+			{#if showNewMessage || !selectedConversation}
 				<!-- New Message Form -->
 				<div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
 					<h3 class="text-lg font-semibold text-gray-900">New Message</h3>
@@ -259,7 +260,7 @@
 				</div>
 			{:else}
 				<!-- Conversation View -->
-				<ConversationView />
+				<ConversationView {selectedConversation} />
 			{/if}
 		</div>
 	</div>
