@@ -31,8 +31,7 @@
 	}
 </script>
 
-<div class="bg-white border-r border-gray-200 h-full flex flex-col">
-	<div class="flex-1 overflow-y-auto">
+<div class="bg-white border-r border-gray-200 h-full flex flex-col overflow-y-auto">
 		{#if loading}
 			{#each Array(5) as _}
 				<div class="w-full p-4 text-left border-b border-gray-100">
@@ -86,5 +85,4 @@
 				<p class="text-sm text-gray-400 mt-1">Send your first message to get started</p>
 			</div>
 		{/if}
-	</div>
 </div>
