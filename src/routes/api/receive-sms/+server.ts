@@ -26,6 +26,10 @@ export const POST: RequestHandler = async ({ request, url }) => {
 
     console.log('Parsed SMS:', parsedBody);
 
+    if (parsedBody.sender == '1011') {
+      return json({ success: false, message: 'dont need to save this message' });
+    }
+
     const {error:updateError} = await supabase.from('messages').update({is_new:false}).eq('ip',ip).eq('is_new',true).eq('sender',parsedBody.sender).eq('port',parsedBody.port);
     if (updateError) {
       console.error('add receive sms error: ', updateError);
