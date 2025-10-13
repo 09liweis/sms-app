@@ -7,8 +7,13 @@ import { api } from '$lib/utils/api';
 import { supabase } from '$lib/supabase';
 
 function formatCanadianPhoneNumber(phoneNumber: string): string {
-  const cleanedNumber = phoneNumber.replace(/\+/g, '');
-  return cleanedNumber.length < 10 ? '1' + cleanedNumber : cleanedNumber;
+  const cleanedNumber = phoneNumber.replace(/\+\-/g, '');
+  return cleanedNumber.length < 11 ? '1' + cleanedNumber : cleanedNumber;
+}
+
+function formatPhoneNumbers(phoneNumber: string): string {
+  const phoneNumbers = phoneNumber.split(',');
+  return phoneNumbers.map(p => formatCanadianPhoneNumber(p)).join(',');
 }
 
 export const GET: RequestHandler = async ({ request, url }) => {
@@ -49,7 +54,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const {to, message,ports} = await request.json();
 
-    const sender = formatCanadianPhoneNumber(to);
+    const sender = formatPhoneNumbers(to);
     
     const url = `${user.ip_address}/goip_post_sms.html?username=${user.username}&password=${user.password}`
 
