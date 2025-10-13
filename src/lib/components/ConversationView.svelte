@@ -61,7 +61,7 @@
 			const { success } = await api.post('/api/sms', {
 				to: selectedConversation.sender,
 				message: replyMessage,
-				ports: selectedConversation.port ? [selectedConversation.port] : []
+				port: selectedConversation.port
 			});
 
 			if (success) {

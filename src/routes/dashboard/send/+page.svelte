@@ -76,10 +76,7 @@
 			success = true;
 			phoneNumber = '';
 			message = '';
-			
-			setTimeout(() => {
-				success = false;
-			}, 5000);
+			success = false;
 		} catch (err) {
 			error = 'Failed to send SMS. Please try again.';
 		} finally {
@@ -107,6 +104,9 @@
 	function handleSelectConversation(conversation: SMSMessage) {
 		showNewMessage = false;
 		phoneNumber = conversation.sender;
+		if (conversation.port) {
+			selectedPort = conversation.port;
+		}
 		selectedConversation = conversation;
 	}
 
@@ -210,7 +210,6 @@
 						disabled={isLoading}
 					></textarea>
 					<div class="mt-1 flex justify-between items-center">
-						<p class="text-sm text-gray-500">SMS messages are charged at $0.05 per message</p>
 						<p class="text-sm {isOverLimit ? 'text-red-600' : remainingChars < 20 ? 'text-yellow-600' : 'text-gray-500'}">
 							<span class="hidden sm:inline">{remainingChars} characters remaining</span>
 							<span class="sm:hidden">{remainingChars} left</span>

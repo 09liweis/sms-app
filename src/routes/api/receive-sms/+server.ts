@@ -6,19 +6,24 @@ export const POST: RequestHandler = async ({ request, url }) => {
   try {
     const ip = url.searchParams.get('url');
     const body = await request.text();
+    console.log(body);
     const lines = body.split('\n');
     const lastLine = lines[lines.length - 1];
+
+    const port = parseInt(body.match(/Receiver: "([^"]+)"/)?.[1] || '1')
+
     const parsedBody = {
       "sender": body.match(/Sender: (\d+)/)?.[1],
       "receiver": body.match(/Receiver: "([^"]+)"/)?.[1],
       "SMSC": body.match(/SMSC: (\d+)/)?.[1],
       "SCTS": body.match(/SCTS: (\d+)/)?.[1],
-      "port": body.match(/Slot: "([^"]+)"/)?.[1],
+      "port": port,
       "message": lastLine,
       ip,
       type: 'received',
       is_new: true
     };
+
     console.log('Parsed SMS:', parsedBody);
 
     const {error:updateError} = await supabase.from('messages').update({is_new:false}).eq('ip',ip).eq('is_new',true).eq('sender',parsedBody.sender).eq('port',parsedBody.port);
