@@ -6,7 +6,7 @@ import { api } from '$lib/utils/api';
 import { supabase } from '$lib/supabase';
 
 function formatCanadianPhoneNumber(phoneNumber: string): string {
-  const cleanedNumber = phoneNumber.replace(/\+\-/g, '');
+  const cleanedNumber = phoneNumber.replace(/\D/g, '');
   return cleanedNumber.length < 11 ? '1' + cleanedNumber : cleanedNumber;
 }
 
@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
     const sender = url.searchParams.get('sender');
 
     if (port && sender) {
-      const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('port', port).eq('sender', sender).order('created_at', { ascending: true });
+      const {data, error} = await supabase.from('messages').select('*').eq('ip', user.ip_address).eq('sender', sender).order('created_at', { ascending: true });
       if (error) {
         console.error(error);
         return json({success:false, message: error.message},{status:500});
