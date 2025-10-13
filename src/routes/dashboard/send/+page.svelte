@@ -14,7 +14,7 @@
 	let success = $state(false);
 	let error = $state('');
 	let showNewMessage = $state(false);
-	let selectedPorts:number[] = $state([]);
+	let selectedPort:number = $state(0);
 
 	const maxLength = 160;
 	const remainingChars = $derived(maxLength - message.length);
@@ -50,7 +50,7 @@
 	}
 
 	async function handleSubmit() {
-		if (!phoneNumber || !message || selectedPorts.length === 0) {
+		if (!phoneNumber || !message || selectedPort === 0) {
 			error = 'Please fill in all fields and select at least one port';
 			return;
 		}
@@ -72,7 +72,7 @@
 		success = false;
 
 		try {
-			await sendSMS({to:phoneNumber, message,ports:selectedPorts});
+			await sendSMS({to:phoneNumber, message,port:selectedPort});
 			success = true;
 			phoneNumber = '';
 			message = '';
@@ -188,17 +188,11 @@
 					<label for="ports" class="block text-sm font-medium text-gray-700 mb-2">
 						Ports
 					</label>
-					<button
-						on:click={() => selectedPorts = $user.ports}
-						class="bg-indigo-600 text-white px-3 py-1.5 mb-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
-					>
-						Select All
-					</button>
-					<PortsSelector ports={$user.ports} {selectedPorts} togglePort={(port:number)=>{
-						if(selectedPorts.includes(port)) {
-							selectedPorts = selectedPorts.filter((p) => p !== port);
+					<PortsSelector ports={$user.ports} {selectedPort} togglePort={(port:number)=>{
+						if(selectedPort == port) {
+							selectedPort = 0;
 						} else {
-							selectedPorts = [...selectedPorts, port];
+							selectedPort = port;
 						}
 					}} />
 				</div>

@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { API_HOST } from '$env/static/private';
 import { getRandomInt } from '$lib/utils/helper';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { api } from '$lib/utils/api';
@@ -52,7 +51,7 @@ export const POST: RequestHandler = async ({ request }) => {
   try {
     const user = await getAndDecodeTokenFromHeader(request);
 
-    const {to, message,ports} = await request.json();
+    const {to, message,port} = await request.json();
 
     const sender = formatPhoneNumbers(to);
     
@@ -65,9 +64,9 @@ export const POST: RequestHandler = async ({ request }) => {
         {
           tid: getRandomInt(100),
           to: sender,
-          from: ports.join(','),
+          from: port,
           sms: message,
-          to_all: ports.join(',')
+          to_all: port
         }
       ]
     }
@@ -84,7 +83,7 @@ export const POST: RequestHandler = async ({ request }) => {
           receiver: user.username,
           sender: s,
           message,
-          port: ports.join(','),
+          port,
           type: 'sent'
         }
       })

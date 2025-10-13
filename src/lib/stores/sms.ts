@@ -15,9 +15,9 @@ export interface SMSMessage {
 	type?: string;
 }
 
-export function sendSMS({to,message,ports}:{to:string,message:string,ports:number[]}): Promise<boolean> {
+export function sendSMS({to,message,port}:{to:string,message:string,port:number}): Promise<boolean> {
 
-	api.post('/api/sms', { to, message,ports })
+	api.post('/api/sms', { to, message,port })
 		.then(response => {
 			if (response.success && response.data) {
 				return true;
