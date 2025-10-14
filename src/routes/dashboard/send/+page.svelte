@@ -136,7 +136,7 @@
 					<h2 class="text-lg font-semibold text-gray-900">Conversations</h2>
 					<button
 						on:click={startNewMessage}
-						class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors flex items-center"
+						class="bg-indigo-600 cursor-pointer text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors flex items-center"
 					>
 						<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
