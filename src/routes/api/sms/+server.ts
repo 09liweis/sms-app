@@ -11,7 +11,7 @@ function formatCanadianPhoneNumber(phoneNumber: string): string {
 }
 
 function formatPhoneNumbers(phoneNumber: string): string {
-  const phoneNumbers = phoneNumber.split(',');
+  const phoneNumbers = phoneNumber.split('\n');
   return phoneNumbers.map(p => formatCanadianPhoneNumber(p)).join(',');
 }
 

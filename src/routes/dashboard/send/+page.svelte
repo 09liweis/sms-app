@@ -173,14 +173,14 @@
 					<label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
 						Phone Number
 					</label>
-					<input
+					<textarea
 						id="phone"
-						type="text"
 						bind:value={phoneNumber}
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-						placeholder="+1 (555) 123-4567"
+						rows="4"
+						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"
+						placeholder="Phone separate by new line"
 						disabled={isLoading}
-					/>
+					></textarea>
 					<p class="mt-1 text-sm text-gray-500">Include country code (e.g., +1 for US)</p>
 				</div>
 
