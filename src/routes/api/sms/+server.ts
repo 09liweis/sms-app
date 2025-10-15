@@ -10,9 +10,9 @@ function formatCanadianPhoneNumber(phoneNumber: string): string {
   return cleanedNumber.length < 11 ? '1' + cleanedNumber : cleanedNumber;
 }
 
-function formatPhoneNumbers(phoneNumber: string): string {
+function formatPhoneNumbers(phoneNumber: string): string[] {
   const phoneNumbers = phoneNumber.split('\n');
-  return phoneNumbers.map(p => formatCanadianPhoneNumber(p)).join(',');
+  return phoneNumbers.map(p => formatCanadianPhoneNumber(p));
 }
 
 export const GET: RequestHandler = async ({ request, url }) => {
@@ -53,7 +53,22 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const {to, message,port} = await request.json();
 
-    const sender = formatPhoneNumbers(to);
+    const senders = formatPhoneNumbers(to);
+
+    const {data:userProfile,error:userProfileError} = await supabase.from('user_profiles').select('*').eq('username',user.username).single();
+
+    let sms_quotation = userProfile.sms_quote || 0;
+    
+    if (sms_quotation >= 500) {
+      return json({success:false, message: 'You have reached your sms quotation limit'},{status:400});
+    }
+
+    sms_quotation += senders.length;
+    const {error} = await supabase.from('user_profiles').update({sms_quote:sms_quotation}).eq('username',user.username);
+    if (error) {
+      console.error(error);
+      return json({success:false, message: error.message},{status:500});
+    }
     
     const url = `${user.ip_address}/goip_post_sms.html?username=${user.username}&password=${user.password}`
 
@@ -63,7 +78,7 @@ export const POST: RequestHandler = async ({ request }) => {
       tasks: [
         {
           tid: getRandomInt(100),
-          to: sender,
+          to: senders.join(','),
           from: port,
           sms: message,
           to_all: port
@@ -71,13 +86,13 @@ export const POST: RequestHandler = async ({ request }) => {
       ]
     }
 
-    console.log(body, url);
+    // console.log(body, url);
 
     const {success, data} = await api.post(url, body);
     console.log(data);
     if (success) {
 
-      const insertMessages = sender.split(',').map(s => {
+      const insertMessages = senders.map(s => {
         return {
           ip: user.ip_address,
           receiver: user.username,
