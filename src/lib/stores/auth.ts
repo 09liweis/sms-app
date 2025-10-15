@@ -7,9 +7,10 @@ export interface User {
 	ports:number[];
 	ip_address:string;
 	role:string;
+	sms_quote: number;
 }
 
-const EMPTY_USER:User = {username:'',ports:[],ip_address:'',role:''};
+const EMPTY_USER:User = {username:'',ports:[],ip_address:'',role:'',sms_quote:0};
 
 export const user = writable<User>(EMPTY_USER);
 export const isAuthenticated = writable(false);

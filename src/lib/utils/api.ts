@@ -2,6 +2,7 @@ export interface ApiResponse<T = any> {
 	data?: T;
 	error?: string;
 	success: boolean;
+	sms_quotation?: number;
 }
 
 export interface RequestOptions {

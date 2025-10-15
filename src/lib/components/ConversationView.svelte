@@ -2,6 +2,7 @@
 	import type { SMSMessage } from '$lib/stores/sms';
 	import { onMount } from 'svelte';
 	import { api } from '$lib/utils/api';
+    import { user } from '$lib/stores/auth';
 
 	let { selectedConversation } = $props();
 	
@@ -58,11 +59,17 @@
 
 		sending = true;
 		try {
-			const { success } = await api.post('/api/sms', {
+			const { success, sms_quotation } = await api.post('/api/sms', {
 				to: selectedConversation.sender,
 				message: replyMessage,
 				port: selectedConversation.port
 			});
+
+			if (sms_quotation) {
+				user.update(currentUser => {
+					return { ...currentUser, sms_quote: sms_quotation };
+				});
+			}
 
 			if (success) {
 				replyMessage = '';

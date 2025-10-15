@@ -111,7 +111,7 @@ export const POST: RequestHandler = async ({ request }) => {
       }
     }
 
-    return json({ success, message: 'Send SMS successful' }, { status: data.code });
+    return json({ success, message: 'Send SMS successful', sms_quotation }, { status: data.code });
   } catch (error) {
     console.error(error);
     return json({ success: false, message: 'Opppss something went wrong' }, { status: 500 });
