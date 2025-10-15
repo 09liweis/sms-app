@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { supabase } from '$lib/supabase';
-import { ERROR_MESSAGE, UNAUTHORIZED_MESSAGE } from '$lib/constants/text';
+import { ERROR_MESSAGE, SMS_QUOTATION_LIMIT, UNAUTHORIZED_MESSAGE } from '$lib/constants/text';
 
 export const GET: RequestHandler = async ({ request }) => {
   try {
@@ -16,6 +16,8 @@ export const GET: RequestHandler = async ({ request }) => {
       if (data.role === 'admin') {
         data.ports = Array.from({ length: 63 }, (_, i) => `${i + 1}`);
       }
+
+      data.sms_balance = SMS_QUOTATION_LIMIT - data.sms_quote;
 
       return json({ user:data }, { status: 200 }); 
     } else {

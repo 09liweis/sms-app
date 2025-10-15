@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { api } from '$lib/utils/api';
     import { user } from '$lib/stores/auth';
+    import { SMS_QUOTATION_LIMIT } from '$lib/constants/text';
 
 	let { selectedConversation } = $props();
 	
@@ -59,16 +60,14 @@
 
 		sending = true;
 		try {
-			const { success, sms_quotation } = await api.post('/api/sms', {
+			const { success, curUser  } = await api.post('/api/sms', {
 				to: selectedConversation.sender,
 				message: replyMessage,
 				port: selectedConversation.port
 			});
 
-			if (sms_quotation) {
-				user.update(currentUser => {
-					return { ...currentUser, sms_quote: sms_quotation };
-				});
+			if (curUser) {
+				user.set(curUser);
 			}
 
 			if (success) {

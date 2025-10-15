@@ -1,8 +1,10 @@
+import type { User } from "$lib/stores/auth";
+
 export interface ApiResponse<T = any> {
 	data?: T;
 	error?: string;
 	success: boolean;
-	sms_quotation?: number;
+	curUser?: User;
 }
 
 export interface RequestOptions {

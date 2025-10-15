@@ -4,7 +4,7 @@ import { sendRequest } from '$lib/utils/api';
 import { generateToken } from '$lib/utils/jwt';
 import { API_HOST } from '$env/static/private';
 import { supabase } from '$lib/supabase';
-import { AUTH_SUCCESS_MESSAGE, ERROR_MESSAGE, USER_PROFILES_TABLE } from '$lib/constants/text';
+import { AUTH_SUCCESS_MESSAGE, ERROR_MESSAGE, SMS_QUOTATION_LIMIT, USER_PROFILES_TABLE } from '$lib/constants/text';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
@@ -23,6 +23,8 @@ export const POST: RequestHandler = async ({ request }) => {
     }
     
     const jwt = generateToken({username, password, ip_address:curUser.ip_address});
+
+    curUser.sms_balance = SMS_QUOTATION_LIMIT - curUser.sms_quote;
 
     return json({ success: true, message: AUTH_SUCCESS_MESSAGE, jwt, user:curUser }, { status: 200 }); 
   } catch (error) {

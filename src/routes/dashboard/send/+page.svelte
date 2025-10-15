@@ -126,6 +126,14 @@
 	<div class="mb-6 lg:mb-8">
 		<h1 class="text-3xl font-bold text-gray-900 mb-2">Send SMS</h1>
 		<p class="text-gray-600">Send SMS messages to your customers</p>
+		<div class="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-4">
+			<div class="flex items-center">
+				<svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<p class="text-purple-800 font-medium">Remaining SMS Quotations: {$user.sms_balance}</p>
+			</div>
+		</div>
 	</div>
 
 	<div class="flex h-[calc(100vh-200px)] bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

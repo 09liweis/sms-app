@@ -58,14 +58,14 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const {data:userProfile,error:userProfileError} = await supabase.from('user_profiles').select('*').eq('username',user.username).single();
 
-    let sms_quotation = userProfile.sms_quote || 0;
+    let sms_quote = userProfile.sms_quote || 0;
     
-    if (sms_quotation >= SMS_QUOTATION_LIMIT) {
+    if (sms_quote >= SMS_QUOTATION_LIMIT) {
       return json({success:false, message: SMS_QUOTATION_LIMIT_MESSAGE},{status:400});
     }
 
-    sms_quotation += senders.length;
-    const {error} = await supabase.from('user_profiles').update({sms_quote:sms_quotation}).eq('username',user.username);
+    sms_quote += senders.length;
+    const {error} = await supabase.from('user_profiles').update({sms_quote}).eq('username',user.username);
     if (error) {
       console.error(error);
       return json({success:false, message: error.message},{status:500});
@@ -111,7 +111,9 @@ export const POST: RequestHandler = async ({ request }) => {
       }
     }
 
-    return json({ success, message: 'Send SMS successful', sms_quotation }, { status: data.code });
+    userProfile.sms_quote = sms_quote;
+    userProfile.sms_balance = SMS_QUOTATION_LIMIT - sms_quote;
+    return json({ success, message: 'Send SMS successful', curUser:userProfile }, { status: data.code });
   } catch (error) {
     console.error(error);
     return json({ success: false, message: 'Opppss something went wrong' }, { status: 500 });
