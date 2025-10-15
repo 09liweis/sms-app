@@ -4,7 +4,7 @@
 	import ConversationView from '$lib/components/ConversationView.svelte';
     import { onDestroy, onMount } from 'svelte';
     import { api } from '$lib/utils/api';
-  import { WEBSITE_NAME } from '$lib/constants/text';
+  import { SMS_QUOTATION_LIMIT, WEBSITE_NAME } from '$lib/constants/text';
     import { user } from '$lib/stores/auth';
     import PortsSelector from '$lib/components/PortsSelector.svelte';
 
@@ -60,6 +60,11 @@
 			return;
 		}
 
+		if ($user.sms_balance >= SMS_QUOTATION_LIMIT) {
+			error = 'You have reached your SMS quotation limit. Please wait for a while and try again.';
+			return;
+		}
+
 		// Basic phone number validation
 		// const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
 		// if (!phoneRegex.test(phoneNumber)) {
@@ -70,6 +75,11 @@
 		isLoading = true;
 		error = '';
 		success = false;
+
+		user.update(user => {
+			user.sms_balance -= phoneNumber.split('\n').length;
+			return user;
+		});
 
 		try {
 			await sendSMS({to:phoneNumber, message,port:selectedPort});
