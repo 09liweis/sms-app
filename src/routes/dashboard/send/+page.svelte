@@ -76,17 +76,18 @@
 		error = '';
 		success = false;
 
-		user.update(user => {
-			user.sms_balance -= phoneNumber.split('\n').length;
-			return user;
-		});
-
 		try {
-			await sendSMS({to:phoneNumber, message,port:selectedPort});
-			success = true;
-			phoneNumber = '';
-			message = '';
-			success = false;
+			const success = await sendSMS({to:phoneNumber, message,port:selectedPort});
+			if (success) {
+				phoneNumber = '';
+				message = '';
+				user.update(user => {
+					user.sms_balance -= phoneNumber.split('\n').length;
+					return user;
+				});
+			} else {
+				error = 'You have reached your SMS quotation limit. Please wait for a while and try again.';
+			}
 		} catch (err) {
 			error = 'Failed to send SMS. Please try again.';
 		} finally {

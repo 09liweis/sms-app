@@ -11,6 +11,7 @@
 	let loading = $state(true);
 	let replyMessage = $state('');
 	let sending = $state(false);
+	let errorMessage = $state('');
 
 	onMount(() => {
 		loadMessages();
@@ -49,6 +50,7 @@
 				}
 			}
 		} catch (error) {
+			errorMessage = 'Failed to load messages: ' + error;
 			console.error('Failed to load messages:', error);
 		} finally {
 			loading = false;
@@ -59,8 +61,9 @@
 		if (!replyMessage.trim() || !selectedConversation || sending) return;
 
 		sending = true;
+		errorMessage = '';
 		try {
-			const { success, curUser  } = await api.post('/api/sms', {
+			const { success,error, data  } = await api.post('/api/sms', {
 				to: selectedConversation.sender,
 				message: replyMessage,
 				port: selectedConversation.port
@@ -69,16 +72,17 @@
 			if (success) {
 				replyMessage = '';
 				await loadMessages();
+				user.update(currentUser => {
+					return { ...currentUser, sms_balance:currentUser.sms_balance - 1};
+				});
+			} else if (data.error) {
+				errorMessage = data.error;
 			}
 		} catch (error) {
-			console.error('Failed to send reply:', error);
+			errorMessage = 'Failed to send reply: ' + error;
 		} finally {
 			sending = false;
 		}
-
-		user.update(currentUser => {
-			return { ...currentUser, sms_balance:currentUser.sms_balance - 1};
-		});
 	}
 
 	function handleKeypress(event: KeyboardEvent) {
@@ -150,7 +154,7 @@
 			></textarea>
 			<button
 				type="submit"
-				disabled={sending || !replyMessage.trim() || !selectedConversation}
+				disabled={sending || !replyMessage.trim() || !selectedConversation || $user.sms_balance >= SMS_QUOTATION_LIMIT}
 				class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
 			>
 				{#if sending}
@@ -165,5 +169,15 @@
 				{/if}
 			</button>
 		</form>
+		{#if errorMessage}
+			<div class="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+				<div class="flex items-center">
+					<svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
+					<p class="text-red-800">{errorMessage}</p>
+				</div>
+			</div>
+		{/if}
 	</div>
 </div>

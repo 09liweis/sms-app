@@ -61,7 +61,7 @@ export const POST: RequestHandler = async ({ request }) => {
     let sms_quote = userProfile.sms_quote || 0;
     
     if (sms_quote >= SMS_QUOTATION_LIMIT) {
-      return json({success:false, message: SMS_QUOTATION_LIMIT_MESSAGE},{status:400});
+      return json({success:false, error: SMS_QUOTATION_LIMIT_MESSAGE},{status:400});
     }
 
     sms_quote += senders.length;
