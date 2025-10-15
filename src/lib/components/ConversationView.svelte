@@ -66,10 +66,6 @@
 				port: selectedConversation.port
 			});
 
-			if (curUser) {
-				user.set(curUser);
-			}
-
 			if (success) {
 				replyMessage = '';
 				await loadMessages();
@@ -79,6 +75,10 @@
 		} finally {
 			sending = false;
 		}
+
+		user.update(currentUser => {
+			return { ...currentUser, sms_balance:currentUser.sms_balance - 1};
+		});
 	}
 
 	function handleKeypress(event: KeyboardEvent) {
