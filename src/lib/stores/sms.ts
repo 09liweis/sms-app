@@ -15,22 +15,7 @@ export interface SMSMessage {
 	type?: string;
 }
 
-export function sendSMS({to,message,port}:{to:string,message:string,port:number}): Promise<boolean> {
+export function sendSMS({to,message,port}:{to:string,message:string,port:number}) {
 
-	api.post('/api/sms', { to, message,port })
-		.then(response => {
-			if (response.success && response.data) {
-				return true;
-			}
-			return false;
-		})
-		.catch(() => false);
-
-	// Simulate API call - replace with actual API endpoint
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve(true);
-		}, 1500);
-	});
-
+	return api.post('/api/sms', { to, message,port });
 }

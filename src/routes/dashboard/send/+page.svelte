@@ -77,7 +77,7 @@
 		success = false;
 
 		try {
-			const success = await sendSMS({to:phoneNumber, message,port:selectedPort});
+			const {success,data} = await sendSMS({to:phoneNumber, message,port:selectedPort});
 			if (success) {
 				phoneNumber = '';
 				message = '';
@@ -86,7 +86,7 @@
 					return user;
 				});
 			} else {
-				error = 'You have reached your SMS quotation limit. Please wait for a while and try again.';
+				error = data.error;
 			}
 		} catch (err) {
 			error = 'Failed to send SMS. Please try again.';
