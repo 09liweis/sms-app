@@ -4,6 +4,7 @@ import { getRandomInt } from '$lib/utils/helper';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 import { api } from '$lib/utils/api';
 import { supabase } from '$lib/supabase';
+import { SMS_QUOTATION_LIMIT, SMS_QUOTATION_LIMIT_MESSAGE } from '$lib/constants/text';
 
 function formatCanadianPhoneNumber(phoneNumber: string): string {
   const cleanedNumber = phoneNumber.replace(/\D/g, '');
@@ -59,8 +60,8 @@ export const POST: RequestHandler = async ({ request }) => {
 
     let sms_quotation = userProfile.sms_quote || 0;
     
-    if (sms_quotation >= 500) {
-      return json({success:false, message: 'You have reached your sms quotation limit'},{status:400});
+    if (sms_quotation >= SMS_QUOTATION_LIMIT) {
+      return json({success:false, message: SMS_QUOTATION_LIMIT_MESSAGE},{status:400});
     }
 
     sms_quotation += senders.length;
