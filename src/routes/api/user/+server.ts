@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ request }) => {
         data.ports = Array.from({ length: 63 }, (_, i) => `${i + 1}`);
       }
 
-      data.sms_balance = SMS_QUOTATION_LIMIT - data.sms_usage;
+      data.sms_balance = (data.sms_quote || SMS_QUOTATION_LIMIT) - data.sms_usage;
 
       return json({ user:data }, { status: 200 }); 
     } else {

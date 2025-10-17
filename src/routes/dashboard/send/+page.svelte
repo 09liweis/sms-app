@@ -60,7 +60,7 @@
 			return;
 		}
 
-		if ($user.sms_balance >= SMS_QUOTATION_LIMIT) {
+		if ($user.sms_balance >= ($user.sms_quote || SMS_QUOTATION_LIMIT)) {
 			error = 'You have reached your SMS quotation limit. Please wait for a while and try again.';
 			return;
 		}

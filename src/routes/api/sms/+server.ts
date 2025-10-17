@@ -60,7 +60,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     let sms_usage = userProfile.sms_usage || 0;
     
-    if (sms_usage >= SMS_QUOTATION_LIMIT) {
+    if (sms_usage >= (userProfile.sms_quote || SMS_QUOTATION_LIMIT)) {
       return json({success:false, error: SMS_QUOTATION_LIMIT_MESSAGE},{status:400});
     }
 
@@ -112,7 +112,7 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     userProfile.sms_usage = sms_usage;
-    userProfile.sms_balance = SMS_QUOTATION_LIMIT - sms_usage;
+    userProfile.sms_balance = (userProfile.sms_quote || SMS_QUOTATION_LIMIT) - sms_usage;
     return json({ success, message: 'Send SMS successful', curUser:userProfile }, { status: data.code });
   } catch (error) {
     console.error(error);
