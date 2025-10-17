@@ -6,6 +6,7 @@
     username: '',
     selectedPorts: [] as number[],
     ipAddress: '',
+    sms_quote: 0,
     role: 'user' as 'admin' | 'user' | 'sms_only'
   };
   let editingUser: any = null;
@@ -42,13 +43,15 @@
             username: userData.username,
             ports: userData.selectedPorts,
             ipAddress: userData.ipAddress,
-            role: userData.role
+            role: userData.role,
+            sms_quote: userData.sms_quote
           })
         : await api.post('/api/admin', {
             username: userData.username,
             ports: userData.selectedPorts,
             ipAddress: userData.ipAddress,
-            role: userData.role
+            role: userData.role,
+            sms_quote: userData.sms_quote
           });
 
       if (response.success) {
@@ -57,7 +60,8 @@
           username: '',
           selectedPorts: [],
           ipAddress: '',
-          role: 'user'
+          role: 'user',
+          sms_quote: 0
         };
         editingUser = null;
         await loadUsers();
@@ -78,6 +82,7 @@
   function editUser(user: any) {
     editingUser = user;
     userData = {
+      sms_quote: user.sms_quote,
       username: user.username,
       selectedPorts: Array.isArray(user.ports) ? [...user.ports] : [user.port],
       ipAddress: user.ipAddress,
@@ -88,6 +93,7 @@
   function cancelEdit() {
     editingUser = null;
     userData = {
+      sms_quote: 0,
       username: '',
       selectedPorts: [],
       ipAddress: '',
@@ -221,6 +227,21 @@
             bind:value={userData.username}
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
             placeholder="Enter username"
+            disabled={isLoading}
+            required
+          />
+        </div>
+
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+            SMS Quote *
+          </label>
+          <input
+            id="username"
+            type="number"
+            bind:value={userData.sms_quote}
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+            placeholder="Enter Quote"
             disabled={isLoading}
             required
           />

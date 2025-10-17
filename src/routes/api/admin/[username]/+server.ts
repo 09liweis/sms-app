@@ -4,6 +4,7 @@ import { supabase } from '$lib/supabase';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 
 interface CreateUserRequest {
+  sms_quote: number,
   username: string;
   ports: number[];
   ipAddress: string;
@@ -20,7 +21,7 @@ export const PUT: RequestHandler = async ({ request, params }) => {
 
     const username = params.username;
 
-    const { ports, ipAddress, role }: CreateUserRequest = await request.json();
+    const { ports, ipAddress, role, sms_quote }: CreateUserRequest = await request.json();
 
     // Validate required fields
     if (!username || !ports || !Array.isArray(ports) || ports.length === 0 || !ipAddress || !role) {
@@ -44,7 +45,8 @@ export const PUT: RequestHandler = async ({ request, params }) => {
       .update({
         ports, 
         ip_address:ipAddress,
-        role
+        role,
+        sms_quote
       })
       .eq('username', username)
       .single();

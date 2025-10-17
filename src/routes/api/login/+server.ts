@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request }) => {
     
     const jwt = generateToken({username, password, ip_address:curUser.ip_address});
 
-    curUser.sms_balance = SMS_QUOTATION_LIMIT - curUser.sms_quote;
+    curUser.sms_balance = SMS_QUOTATION_LIMIT - curUser.sms_usage;
 
     return json({ success: true, message: AUTH_SUCCESS_MESSAGE, jwt, user:curUser }, { status: 200 }); 
   } catch (error) {
