@@ -16,7 +16,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
     const response = await sendRequest(url);
     const { data: {code, reason}, success } = response;
-    console.log(response);
     
     if (code === 1) {
       return json({ success: false, message: reason }, { status: 401 });
