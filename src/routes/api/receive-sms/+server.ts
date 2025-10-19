@@ -26,7 +26,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
 
     console.log('Parsed SMS:', parsedBody);
 
-    if (['1011','69614'].includes(parsedBody.sender || '1011')) {
+    if (['1011','69614','433222'].includes(parsedBody.sender || '1011')) {
       return json({ success: false, message: 'dont need to save this message' });
     }
 

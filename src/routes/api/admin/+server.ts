@@ -4,6 +4,7 @@ import { supabase } from '$lib/supabase';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
 
 interface CreateUserRequest {
+  sms_quote: number;
   username: string;
   ports: number[];
   ipAddress: string;
@@ -18,7 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
       return json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { username, ports, ipAddress, role }: CreateUserRequest = await request.json();
+    const { username, ports, ipAddress, role, sms_quote }: CreateUserRequest = await request.json();
 
     // Validate required fields
     if (!username || !ports || !Array.isArray(ports) || ports.length === 0 || !ipAddress || !role) {
@@ -56,6 +57,7 @@ export const POST: RequestHandler = async ({ request }) => {
           ports,
           ip_address: ipAddress,
           role,
+          sms_quote,
           created_at: new Date().toISOString()
         }
       ])
@@ -70,6 +72,7 @@ export const POST: RequestHandler = async ({ request }) => {
     return json({ 
       success: true, 
       user: {
+        sms_quote: data.sms_quote,
         username: data.username,
         ports: data.ports,
         ipAddress: data.ip_address,
@@ -86,7 +89,7 @@ export const GET: RequestHandler = async () => {
   try {
     const { data: users, error } = await supabase
       .from('user_profiles')
-      .select('username, ports, ip_address, role, created_at')
+      .select('username, ports, ip_address, role, created_at, sms_quote')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -100,6 +103,7 @@ export const GET: RequestHandler = async () => {
       ports: user.ports,
       ipAddress: user.ip_address,
       role: user.role,
+      sms_quote: user.sms_quote,
       createdAt: user.created_at
     })) || [];
 
