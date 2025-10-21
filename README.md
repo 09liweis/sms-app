@@ -1,116 +1,143 @@
- # 8n8 — SMS management UI (SvelteKit)
+# 8n8 — SMS management UI (SvelteKit)
 
- This repository is a SvelteKit application for managing SMS messages via GoIP devices and persisting data to Supabase. It provides a small admin UI, conversation inbox, sending UI, and server endpoints that proxy requests to GoIP devices.
+Lightweight admin UI and server for sending and receiving SMS via GoIP devices, backed by Supabase.
 
- Key features
- - User authentication via a JWT issued on login (stored in localStorage)
- - Send SMS through GoIP devices (server routes proxy requests)
- - Persist incoming and outgoing messages in Supabase
- - Admin endpoints for creating users and listing user profiles
+This README summarizes how the app is organized, the environment it expects, developer commands, and security notes derived from the code.
 
- Repository layout (important files)
- - `package.json` — project scripts and dependencies
- - `vite.config.ts`, `svelte.config.js`, `tsconfig.json` — tooling/config
- - `src/lib/supabase.ts` — Supabase client initialization (reads `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`)
- - `src/lib/utils/api.ts` — `sendRequest` utility and `api` helpers used for HTTP requests
- - `src/lib/utils/jwt.ts` — JWT helpers used to generate and decode tokens (server-side)
- - `src/routes/api/*` — server endpoints used by the client (`/api/login`, `/api/sms`, `/api/admin`, `/api/user`, etc.)
+Repository highlights
 
- Prerequisites
- - Node.js (recommended: compatible with Vite/SvelteKit used in `devDependencies`)
- - A Supabase project and table schema (see notes below)
- - If you run the app against real GoIP devices, you need the devices reachable from the server and valid credentials for them
+- Framework: SvelteKit + Vite
+- Supabase client: `src/lib/supabase.ts` (reads `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY`)
+- HTTP client helper: `src/lib/utils/api.ts` (`sendRequest` + `api` convenience methods)
+- JWT helpers (server-side): `src/lib/utils/jwt.ts` (currently uses a hard-coded secret)
+- Routes: `src/routes/api/*` — server endpoints used by the UI (`/api/login`, `/api/sms`, `/api/admin`, `/api/user`, `/api/receive-sms`, etc.)
+- Stores: `src/lib/stores/*` (`auth.ts`, `sms.ts`) — client-side state and helpers used by components
 
- Environment variables
- - PUBLIC_SUPABASE_URL — Supabase public URL (required by `src/lib/supabase.ts`)
- - PUBLIC_SUPABASE_ANON_KEY — Supabase anon key (required by `src/lib/supabase.ts`)
- - (Optional) API_HOST — referenced in some server code (see `src/routes/api/login/+server.ts`), used when constructing external requests
+Important environment variables
 
- NOTE: The project currently embeds a JWT secret in `src/lib/utils/jwt.ts` as `JWT_SECRET = 'your-secret-key'`. For production you should replace that with a secure secret pulled from environment variables (server-only) and never commit secrets to source control.
+- PUBLIC_SUPABASE_URL — Supabase public URL
+- PUBLIC_SUPABASE_ANON_KEY — Supabase anon public key
+- (Optional) API_HOST — referenced in server code; used for constructing external device requests in some places (see `src/routes/api/login/+server.ts`)
 
- Database / Supabase
- - The app expects at least two tables: `user_profiles` and `messages` (names referenced in code). A minimal shape used by the server:
-	 - `user_profiles` — fields include `username`, `ports` (array), `ip_address`, `role`, `sms_quote`, `sms_usage`, `created_at`
-	 - `messages` — fields include `ip`, `receiver`, `sender`, `message`, `port`, `type` ('sent' | 'received'), `is_new`, `created_at`
+NOTE: `src/lib/utils/jwt.ts` contains `const JWT_SECRET = 'your-secret-key'`. This is insecure for production — move to a server-only env var (e.g., `PRIVATE_JWT_SECRET`) and import via `$env/static/private`.
 
- Scripts
- - `npm run dev` — start dev server (Vite)
- - `npm run build` — build for production
- - `npm run preview` — preview production build
- - `npm run check` — run `svelte-check` for type checking
- - `npm run lint` — run ESLint
+Database (Supabase) expectations
 
- How the server routes work (high level)
- - `POST /api/login` — server looks up the user in `user_profiles`, validates connectivity to the GoIP device, returns a JWT on success
- - `GET /api/sms` — returns conversations or messages for the authenticated user (requires Bearer token)
- - `POST /api/sms` — sends SMS via the GoIP device (proxies to the device), updates Supabase with sent messages and usage
- - `GET/POST /api/admin` — admin-only endpoints to list/create users (request must include a valid JWT)
- - `GET /api/user` — returns current user profile derived from JWT and Supabase
+The server code expects two tables (names found in `src/lib/constants/text.ts`):
 
- Client utilities
- - `src/lib/utils/api.ts` contains `sendRequest` which includes a client-side token getter that reads `localStorage.getItem('token')` (the app stores JWT in localStorage)
+- `user_profiles` — used to store per-user device info and quotas. Suggested columns:
+	- `username` (primary key, text)
+	- `ports` (integer[] or text[])
+	- `ip_address` (text)
+	- `role` (text) — one of `admin`, `user`, `sms_only`
+	- `sms_quote` (integer)
+	- `sms_usage` (integer)
+	- `created_at` (timestamptz)
 
- Security notes
- - The repo currently stores a placeholder `JWT_SECRET` inside the code. Move secrets to environment variables (server-only) and use `import { PRIVATE_JWT_SECRET } from '$env/static/private'` or similar in server code.
- - Keep Supabase service role keys out of the repository. `PUBLIC_*` keys are intended to be public.
+- `messages` — stores incoming and outgoing SMS messages. Suggested columns:
+	- `id` (uuid or bigint)
+	- `ip` (text)
+	- `receiver` (text)
+	- `sender` (text)
+	- `message` (text)
+	- `port` (integer)
+	- `type` (text) — `sent` | `received`
+	- `is_new` (boolean)
+	- `created_at` (timestamptz)
 
- Development (quickstart)
- 1. Install dependencies
+Scripts (from `package.json`)
 
- ```bash
- npm install
- ```
+- `npm run dev` — start development server (Vite)
+- `npm run build` — build for production
+- `npm run preview` — preview production build
+- `npm run check` — run `svelte-check` (type checking)
+- `npm run lint` — run ESLint
 
- 2. Set required environment variables. In a local `.env` or devcontainer, provide at least:
+How the main server endpoints behave
 
- ```bash
- # example .env
- PUBLIC_SUPABASE_URL=https://your-project.supabase.co
- PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
- ```
+- `POST /api/login` (see `src/routes/api/login/+server.ts`)
+	- Looks up `user_profiles` by username to get `ip_address`.
+	- Calls the GoIP device `goip_get_sms_stat.html` to validate credentials.
+	- On success returns a JWT (issued with `generateToken`) and sanitized user data.
 
- 3. Start the dev server
+- `GET /api/sms` (see `src/routes/api/sms/+server.ts`)
+	- Requires `Authorization: Bearer <token>` header.
+	- If `port` and `sender` query params are provided, returns messages filtered by those.
+	- Otherwise returns new received messages for the user's device IP.
 
- ```bash
- npm run dev
- ```
+- `POST /api/sms` (see `src/routes/api/sms/+server.ts`)
+	- Requires JWT auth.
+	- Validates user SMS quota (`sms_usage` vs `sms_quote`).
+	- Formats recipients, proxies a `goip_post_sms.html` request to the device via server-side HTTP helper, and inserts sent messages into `messages`.
 
- 4. Open the app in your browser (Vite will print the URL and port):
+- `POST /api/receive-sms` (see `src/routes/api/receive-sms/+server.ts`)
+	- Endpoint intended for GoIP devices to POST raw SMS payloads.
+	- Parses the raw body, inserts a `received` message row and marks previous messages as not new.
 
- ```bash
- "$BROWSER" http://localhost:5173
- ```
+- `GET/POST /api/admin` (see `src/routes/api/admin/+server.ts`)
+	- Admin-only (uses the token); allows listing all users and creating new `user_profiles` entries with port validation and role checks.
 
- Optional: Build & preview
- ```bash
- npm run build
- npm run preview
- ```
+- `GET /api/user` (see `src/routes/api/user/+server.ts`)
+	- Returns the current user's profile (derived from JWT) and calculates `sms_balance`.
 
- Tests, linting & type checks
- - Linting: `npm run lint`
- - Type checking: `npm run check`
+Client utilities and stores
 
- Next steps / improvements
- - Move JWT secret into server-only env var and remove the hard-coded default in `src/lib/utils/jwt.ts`.
- - Add database migration SQL or a Supabase setup script to create `user_profiles` and `messages` tables with the expected schema.
- - Add unit/integration tests for API routes and utilities.
- - Add environment-based config for calling GoIP devices (timeouts, retry logic, host override) and improved error handling when devices are unreachable.
+- `src/lib/utils/api.ts` — `sendRequest` wraps fetch with a timeout and automatically adds `Authorization: Bearer <token>` when running in the browser. It returns a uniform `ApiResponse` shape.
+- `src/lib/stores/auth.ts` — exports `user`, `isAuthenticated`, and helpers: `login`, `logout`, `isUserLogin`, `getDashboardData`.
+- `src/lib/stores/sms.ts` — `sendSMS` helper (wraps `api.post('/api/sms', ...)`).
 
- Where to look in the codebase
- - Supabase client: `src/lib/supabase.ts`
- - HTTP helpers: `src/lib/utils/api.ts`
- - JWT helpers: `src/lib/utils/jwt.ts`
- - Routes: `src/routes/api/*`
+UI
 
- If you'd like I can also:
- - Add a `.env.example` or `README` section with recommended Supabase table schemas
- - Replace the hard-coded `JWT_SECRET` with a secure environment variable and update server code accordingly
- - Create a small SQL migration file for `user_profiles` and `messages`
+Components live under `src/lib/components/` and include a login form, conversation list, conversation view, ports selector, input field and a simple dashboard. The app's routes include `/` (login), `/dashboard`, `/dashboard/admin`, and `/dashboard/send`.
 
- Completion summary
- - Updated this `README.md` with an accurate overview, setup steps, environment variables, and notes based on the project's code.
+Security notes and recommended changes
+
+- Move `JWT_SECRET` out of source: replace the hard-coded `JWT_SECRET` in `src/lib/utils/jwt.ts` with a server-only env var and import via `$env/static/private`.
+- Avoid storing Supabase service role keys in the repo. `PUBLIC_*` keys are okay to use in the client but do not use them for server admin operations.
+- Validate and sanitize any device-proxied responses before persisting.
+
+Local development quickstart
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Create a `.env` in the project root with at least:
+
+```bash
+PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
+# (optional) PRIVATE_JWT_SECRET=replace-me-for-local-testing
+```
+
+3. Start dev server
+
+```bash
+npm run dev
+```
+
+4. Open the app (Vite will print the host/port)
+
+```bash
+"$BROWSER" http://localhost:5173
+```
 
 
 
-https://8n8.netlify.app/api/receive-sms?url=http://13.228.130.204:53258&
+## 用户手册
+
+### 添加admin用户
+首先在skyline添加admin用户
+然后用github account去登录supabase，到website项目里面的user_profiles添加admin username，ip_address等等
+
+### 添加永华
+打开项目网站地址，用admin用户去登录，登录后去admin，根据表单添加用户
+
+
+### 接受短信
+将以下格式的api接口放到skyline短信转发的端口，用来保存接受到的短信
+[host]/api/receive-sms?url=[ip_address:port]&
+
+例子： https://8n8.netlify.app/api/receive-sms?url=http://13.228.130.204:53258&
