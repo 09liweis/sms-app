@@ -2,7 +2,6 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { sendRequest } from '$lib/utils/api';
 import { getAndDecodeTokenFromHeader } from '$lib/utils/jwt';
-import { API_HOST } from '$env/static/private';
 
 export const GET: RequestHandler = async ({ request }) => {
   try {

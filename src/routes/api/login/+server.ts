@@ -2,7 +2,6 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { sendRequest } from '$lib/utils/api';
 import { generateToken } from '$lib/utils/jwt';
-import { API_HOST } from '$env/static/private';
 import { supabase } from '$lib/supabase';
 import { AUTH_SUCCESS_MESSAGE, ERROR_MESSAGE, SMS_QUOTATION_LIMIT, USER_PROFILES_TABLE } from '$lib/constants/text';
 
