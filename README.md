@@ -128,13 +128,22 @@ npm run dev
 
 ## 用户手册
 
+### 代码仓库
+在github里面叫sms-app
+
+### 第三方数据库/服务器 均用github login
+数据库: https://supabase.com
+服务器: https://netlify.com
+
+### 网站地址： https://8n8.netlify.app/
+如果需要配置dns，去netlify dashboard配置
+
 ### 添加admin用户
 首先在skyline添加admin用户
 然后用github account去登录supabase，到website项目里面的user_profiles添加admin username，ip_address等等
 
-### 添加永华
+### 添加用户
 打开项目网站地址，用admin用户去登录，登录后去admin，根据表单添加用户
-
 
 ### 接受短信
 将以下格式的api接口放到skyline短信转发的端口，用来保存接受到的短信
